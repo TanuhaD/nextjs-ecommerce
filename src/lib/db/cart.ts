@@ -27,7 +27,6 @@ export const GetCart = cache(async (): Promise<ShoppingCart | null> => {
       where: { userId: session.user.id },
       include: { items: { include: { product: true } } },
     });
-    console.log("cart registered", cart);
   } else {
     const localCartId = cookies().get("localCartId")?.value;
     cart = localCartId
@@ -36,7 +35,6 @@ export const GetCart = cache(async (): Promise<ShoppingCart | null> => {
           include: { items: { include: { product: true } } },
         })
       : null;
-    console.log("cart anonym", cart);
   }
   if (!cart) {
     return null;
@@ -95,11 +93,18 @@ export async function mergeAnonymousCartIntoUserCart(userId: string) {
         where: { cartId: userCart.id },
       });
 
-      await tx.cartItem.createMany({
-        data: mergedCartItems.map((item) => ({
-          ...item,
-          cartId: userCart.id,
-        })),
+      await tx.cart.update({
+        where: { id: userCart.id },
+        data: {
+          items: {
+            createMany: {
+              data: mergedCartItems.map((item) => ({
+                productId: item.productId,
+                quantity: item.quantity,
+              })),
+            },
+          },
+        },
       });
     } else {
       await tx.cart.create({
@@ -108,7 +113,8 @@ export async function mergeAnonymousCartIntoUserCart(userId: string) {
           items: {
             createMany: {
               data: localCart.items.map((item) => ({
-                ...item,
+                productId: item.productId,
+                quantity: item.quantity,
               })),
             },
           },
