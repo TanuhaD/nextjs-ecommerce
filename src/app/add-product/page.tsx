@@ -34,8 +34,7 @@ async function addProduct(formData: FormData) {
 
 export default async function AddProductPage() {
   const session = await getServerSession(authOptions);
-
-  if (!session) {
+  if (!session || session.user.role !== "ADMIN") {
     redirect("/api/auth/signin?callbackUrl=/add-product");
   }
   return (
