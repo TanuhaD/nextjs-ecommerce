@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db/prisma";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "../api/auth/[...nextauth]/route";
+import UploadFromFileForm from "./UploadFromFileForm";
 export const metadata = {
   title: "Add Product Flowmazon",
 };
@@ -13,6 +14,8 @@ async function addProduct(formData: FormData) {
 
   if (!session) {
     redirect("/api/auth/signin?callbackUrl=/add-product");
+  } else if (session.user.role !== "ADMIN") {
+    redirect("/forbidden");
   }
   const name = formData.get("name")?.toString();
   const description = formData.get("description")?.toString();
@@ -34,8 +37,11 @@ async function addProduct(formData: FormData) {
 
 export default async function AddProductPage() {
   const session = await getServerSession(authOptions);
-  if (!session || session.user.role !== "ADMIN") {
+
+  if (!session) {
     redirect("/api/auth/signin?callbackUrl=/add-product");
+  } else if (session.user.role !== "ADMIN") {
+    redirect("/forbidden");
   }
   return (
     <div>
@@ -69,6 +75,7 @@ export default async function AddProductPage() {
         />
         <FormSubmitButton className="btn-block">Add Product</FormSubmitButton>
       </form>
+      <UploadFromFileForm />
     </div>
   );
 }
