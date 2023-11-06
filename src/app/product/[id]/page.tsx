@@ -7,6 +7,9 @@ import { notFound } from "next/navigation";
 import { cache } from "react";
 import AddCartButton from "./AddCartButton";
 import { incrementProductQuantity } from "./action";
+import EditProductButton from "./EditProductButton";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 interface ProductPageProps {
   params: {
@@ -17,7 +20,7 @@ type Props = {
   params: { id: string };
 };
 
-const getProduct = cache(async (id: string) => {
+const getProduct = async (id: string) => {
   let product;
   try {
     product = await prisma.product.findUnique({ where: { id } });
@@ -26,7 +29,7 @@ const getProduct = cache(async (id: string) => {
     notFound();
   }
   return product;
-});
+};
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = params;
@@ -43,6 +46,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 const ProductPage: React.FC<ProductPageProps> = async ({ params: { id } }) => {
   const product = await getProduct(id);
   const cart = await GetCart();
+  const session = await getServerSession(authOptions);
   let isProductInCart = false;
   if (cart) {
     isProductInCart = cart.items.some(
@@ -69,6 +73,9 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params: { id } }) => {
           incrementProductQuantity={incrementProductQuantity}
           isProductInCart={isProductInCart}
         />
+        {session?.user.role === "ADMIN" && (
+          <EditProductButton productId={product.id} />
+        )}
       </div>
     </div>
   );
