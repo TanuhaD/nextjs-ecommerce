@@ -18,7 +18,7 @@ export type ShoppingCart = CartWithProducts & {
   subTotal: number;
 };
 
-export const GetCart = cache(async (): Promise<ShoppingCart | null> => {
+export const GetCart = async (): Promise<ShoppingCart | null> => {
   const session = await getServerSession(authOptions);
   let cart: CartWithProducts | null = null;
 
@@ -48,7 +48,7 @@ export const GetCart = cache(async (): Promise<ShoppingCart | null> => {
       0
     ),
   };
-});
+};
 
 export async function CreateCart(): Promise<ShoppingCart> {
   const session = await getServerSession(authOptions);
