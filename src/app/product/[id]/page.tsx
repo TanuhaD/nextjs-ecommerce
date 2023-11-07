@@ -3,13 +3,14 @@ import { GetCart } from "@/lib/db/cart";
 import { prisma } from "@/lib/db/prisma";
 import { Metadata } from "next";
 import Image from "next/image";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { cache } from "react";
 import AddCartButton from "./AddCartButton";
-import { incrementProductQuantity } from "./action";
+import { deleteProductId, incrementProductQuantity } from "./action";
 import EditProductButton from "./EditProductButton";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import DeleteProductButton from "./DeleteProductButton";
 
 interface ProductPageProps {
   params: {
@@ -75,6 +76,13 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params: { id } }) => {
         />
         {session?.user.role === "ADMIN" && (
           <EditProductButton productId={product.id} />
+        )}
+        {session?.user.role === "ADMIN" && (
+          <DeleteProductButton
+            productId={product.id}
+            userId={cart?.userId as string}
+            deleteProductId={deleteProductId}
+          />
         )}
       </div>
     </div>
