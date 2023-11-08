@@ -19,7 +19,7 @@ export default function AddCartButton({
   return (
     <div className="flex items-center gap-2">
       <button
-        className="btn-primary btn"
+        className="btn-primary btn shadow-md hover:shadow-xl"
         onClick={() => {
           setSetsucces(false);
           startTransition(async () => {
@@ -46,9 +46,6 @@ export default function AddCartButton({
       </button>
       {isPending && (
         <span className="loading loading-spinner loading-md"></span>
-      )}
-      {!isPending && setsucces && (
-        <span className="text-success">Added to cart.</span>
       )}
       {isProductInCart && <span className="text-success">Added to cart.</span>}
     </div>
