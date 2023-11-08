@@ -6,7 +6,7 @@ import Image from "next/image";
 import { notFound, redirect } from "next/navigation";
 import { cache } from "react";
 import AddCartButton from "./AddCartButton";
-import { deleteProductId, incrementProductQuantity } from "./action";
+import { incrementProductQuantity } from "./action";
 import EditProductButton from "./EditProductButton";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
@@ -81,7 +81,6 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params: { id } }) => {
           <DeleteProductButton
             productId={product.id}
             userId={cart?.userId as string}
-            deleteProductId={deleteProductId}
           />
         )}
       </div>
