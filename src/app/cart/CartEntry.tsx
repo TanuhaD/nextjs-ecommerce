@@ -36,7 +36,7 @@ export default function CartEntry({
           className="rounded-lg"
         />
         <div>
-          <Link href={`/products/${product.id}`} className="font-bold">
+          <Link href={`/product/${product.id}`} className="font-bold">
             {product.name}
           </Link>
           <div>Price:{formatPrice(product.price)}</div>
