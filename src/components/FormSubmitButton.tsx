@@ -1,7 +1,7 @@
 "use client";
 
 import { ComponentProps } from "react";
-import { experimental_useFormStatus as useFormStatus } from "react-dom";
+import { useFormStatus } from "react-dom";
 
 type FormSubmitButtonProps = {
   children: React.ReactNode;
@@ -17,7 +17,7 @@ export default function FormSubmitButton({
   return (
     <button
       {...props}
-      className={`btn-primary btn ${className}`}
+      className={`btn-primary btn shadow-md hover:shadow-xl ${className}`}
       type="submit"
       disabled={pending}
     >
