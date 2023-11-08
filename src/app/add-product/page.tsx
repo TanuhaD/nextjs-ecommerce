@@ -1,8 +1,8 @@
 import FormSubmitButton from "@/components/FormSubmitButton";
 import { prisma } from "@/lib/db/prisma";
-import { getServerSession } from "next-auth";
+import { checkAdminUser } from "@/lib/checkAdminUser";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { authOptions } from "../api/auth/[...nextauth]/route";
 import UploadFromFileForm from "./UploadFromFileForm";
 export const metadata = {
   title: "Add Product Flowmazon",
@@ -10,13 +10,7 @@ export const metadata = {
 
 async function addProduct(formData: FormData) {
   "use server";
-  const session = await getServerSession(authOptions);
-
-  if (!session) {
-    redirect("/api/auth/signin?callbackUrl=/add-product");
-  } else if (session.user.role !== "ADMIN") {
-    redirect("/forbidden");
-  }
+  checkAdminUser();
   const name = formData.get("name")?.toString();
   const description = formData.get("description")?.toString();
   const imageUrl = formData.get("imageUrl")?.toString();
@@ -32,17 +26,12 @@ async function addProduct(formData: FormData) {
       price,
     },
   });
+  revalidatePath("/");
   redirect("/");
 }
 
 export default async function AddProductPage() {
-  const session = await getServerSession(authOptions);
-
-  if (!session) {
-    redirect("/api/auth/signin?callbackUrl=/add-product");
-  } else if (session.user.role !== "ADMIN") {
-    redirect("/forbidden");
-  }
+  checkAdminUser();
   return (
     <div>
       <h1 className="mb-3 text-lg font-bold">Add Product</h1>
@@ -51,27 +40,27 @@ export default async function AddProductPage() {
           required
           name="name"
           placeholder="Name"
-          className="input-bordered input mb-3 w-full"
+          className="input-bordered input mb-3 w-full shadow-md"
         />
         <textarea
           required
           name="description"
           placeholder="Description"
-          className="textarea-bordered textarea mb-3 w-full"
+          className="textarea-bordered textarea mb-3 w-full shadow-md"
         />
         <input
           required
           name="imageUrl"
           placeholder="Image Url"
           type="url"
-          className="input-bordered input mb-3 w-full"
+          className="input-bordered input mb-3 w-full shadow-md"
         />
         <input
           required
           name="price"
           placeholder="Price"
           type="number"
-          className="input-bordered input mb-3 w-full"
+          className="input-bordered input mb-3 w-full shadow-md "
         />
         <FormSubmitButton className="btn-block">Add Product</FormSubmitButton>
       </form>
