@@ -105,7 +105,10 @@ export default async function EditProductPage({
           />
         </label>
         <div className=" flex justify-center">
-          <button type="submit" className="btn-primary btn ">
+          <button
+            type="submit"
+            className="btn-primary btn shadow-md hover:shadow-xl"
+          >
             Update Product
           </button>
         </div>
