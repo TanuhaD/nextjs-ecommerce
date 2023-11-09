@@ -1,6 +1,7 @@
 "use client";
 
 import { ComponentProps } from "react";
+// @ts-ignoregit
 import { useFormStatus } from "react-dom";
 
 type FormSubmitButtonProps = {
