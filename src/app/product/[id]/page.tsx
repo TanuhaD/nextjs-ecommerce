@@ -78,10 +78,7 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params: { id } }) => {
           <EditProductButton productId={product.id} />
         )}
         {session?.user.role === "ADMIN" && (
-          <DeleteProductButton
-            productId={product.id}
-            userId={cart?.userId as string}
-          />
+          <DeleteProductButton productId={product.id} />
         )}
       </div>
     </div>
