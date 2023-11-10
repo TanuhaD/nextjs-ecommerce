@@ -3,10 +3,12 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import Footer from "@/components/Footer/Footer";
 import SessionProvider from "./SessionProvider";
+import { env } from "@/lib/env";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
+  metadataBase: new URL(env.BASE_URL),
   title: "Flowmazon",
   description: "We make your wallet cry",
 };
