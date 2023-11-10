@@ -63,6 +63,8 @@ export default function UploadFromFileForm() {
         title: "Upload successful",
         showConfirmButton: false,
         timer: 1500,
+      }).then(() => {
+        window.location.href = "/";
       });
     } else {
       const error = await response.json();
