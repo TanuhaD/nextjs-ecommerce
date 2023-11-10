@@ -4,7 +4,6 @@ import { checkAdminUser } from "@/lib/checkAdminUser";
 import { CreateCart, GetCart } from "@/lib/db/cart";
 import { prisma } from "@/lib/db/prisma";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 export async function incrementProductQuantity(productId: string) {
   const cart = (await GetCart()) ?? (await CreateCart());
@@ -38,19 +37,3 @@ export async function incrementProductQuantity(productId: string) {
   }
   revalidatePath("/product");
 }
-
-// export async function deleteProductId(productId: string, userId: string) {
-//   checkAdminUser();
-
-//   try {
-//     await prisma.product.delete({
-//       where: { id: productId },
-//     });
-//     return true;
-//   } catch (e) {
-//     console.log(e);
-//   }
-
-//   revalidatePath("/");
-//   redirect("/");
-// }
