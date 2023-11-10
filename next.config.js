@@ -5,6 +5,11 @@ const nextConfig = {
       { hostname: "images.unsplash.com" },
       { hostname: "lh3.googleusercontent.com" },
       { hostname: "avatars.githubusercontent.com" },
+      {
+        protocol: "https",
+        hostname: "storage.googleapis.com",
+        pathname: "/demchenko-ecommerce/**",
+      },
     ],
   },
 };
