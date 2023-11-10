@@ -2,8 +2,10 @@ import { GetCart } from "@/lib/db/cart";
 import CartEntry from "./CartEntry";
 import { setProductQuantity } from "./action";
 import { formatPrice } from "@/lib/format";
+import { env } from "@/lib/env";
 
 export const metadata = {
+  metadataBase: new URL(env.BASE_URL),
   title: "Your cart - Flowmazon",
 };
 
