@@ -1,5 +1,6 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { prisma } from "@/lib/db/prisma";
+import { env } from "@/lib/env";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -10,6 +11,7 @@ interface ProductPageProps {
   };
 }
 export const metadata = {
+  metadataBase: new URL(env.BASE_URL),
   title: "Edit Product Flowmazon",
 };
 
