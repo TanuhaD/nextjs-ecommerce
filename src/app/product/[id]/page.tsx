@@ -58,7 +58,7 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params: { id } }) => {
   return (
     <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
       <Image
-        src={product.imageUrl}
+        src={product.imageUrl || "/no-image-placeholder.png"}
         alt={product.name}
         width={500}
         height={500}

@@ -33,7 +33,7 @@ export default async function Home({
         <div className="hero rounded-xl bg-base-200">
           <div className="hero-content flex-col lg:flex-row">
             <Image
-              src={products[0].imageUrl}
+              src={products[0].imageUrl || "/no-image-placeholder.png"}
               alt={products[0].name}
               width={800}
               height={400}
