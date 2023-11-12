@@ -2,50 +2,17 @@
 
 import { checkAdminUser } from "@/lib/checkAdminUser";
 import { prisma } from "@/lib/db/prisma";
-import { Storage } from "@google-cloud/storage";
+import { fetchImageByLink } from "@/lib/fetchImageByLink";
+import { uploadFileToGoogleStorage } from "@/lib/saveFileToGCS";
+import { EditUpdateServerActionResponse } from "@/types/edit-update-server-action-response";
+
 import { nanoid } from "nanoid";
 import { revalidatePath } from "next/cache";
-const storage = new Storage();
 
-const uploadFileToGoogleStorage = async (
-  buffer: Buffer,
-  originalName: string
-) => {
-  const bucketName = "demchenko-ecommerce";
-  const bucket = storage.bucket(bucketName);
-  const fileName = `${nanoid()}_${originalName}`;
-  const blob = bucket.file(fileName);
-
-  try {
-    const blobStream = blob.createWriteStream();
-
-    await new Promise((resolve, reject) => {
-      blobStream.on("error", (err) => {
-        reject(err);
-      });
-
-      blobStream.on("finish", () => {
-        resolve("OK");
-      });
-
-      blobStream.end(buffer);
-    });
-    return {
-      status: "SUCCESS",
-      imgUrl: `https://storage.googleapis.com/${bucketName}/${fileName}`,
-      error: null,
-    };
-  } catch (e) {
-    const error = e as Error;
-    return {
-      status: "FAIL",
-      error: error.message,
-      imgUrl: "",
-    };
-  }
-};
-
-export async function addProduct(prevState: any, formData: FormData) {
+export async function addProduct(
+  _: any,
+  formData: FormData
+): Promise<EditUpdateServerActionResponse> {
   checkAdminUser();
 
   let imageUrl = "";
@@ -57,21 +24,16 @@ export async function addProduct(prevState: any, formData: FormData) {
 
   try {
     if (imageFile.size) {
-      console.log("imageFile", imageFile);
       const bytes = await imageFile.arrayBuffer();
       buffer = Buffer.from(bytes);
       originalName = imageFile.name;
     } else if (imageLink) {
-      const fetchResult = await fetch(imageLink);
-      const contentType = fetchResult.headers.get("content-type");
-      const fileType = contentType?.split("/")[0];
-      const fileExtension = contentType?.split("/")[1];
-      if (fileType !== "image") {
-        throw new Error("Provided link is not an image");
+      const fetchResult = await fetchImageByLink(imageLink);
+      if (fetchResult instanceof Error) {
+        throw fetchResult;
       }
-      const bytes = await fetchResult.arrayBuffer();
-      buffer = Buffer.from(bytes);
-      originalName = nanoid() + "." + fileExtension;
+      buffer = fetchResult.buffer;
+      originalName = nanoid() + "." + fetchResult.fileExtension;
     }
     if (buffer && originalName) {
       const uploadResult = await uploadFileToGoogleStorage(
@@ -82,6 +44,7 @@ export async function addProduct(prevState: any, formData: FormData) {
         return {
           result: "FAIL",
           error: uploadResult.error,
+          prismaResult: null,
         };
       }
       imageUrl = uploadResult.imgUrl;
@@ -91,6 +54,7 @@ export async function addProduct(prevState: any, formData: FormData) {
     return {
       result: "FAIL",
       error: error.message,
+      prismaResult: null,
     };
   }
 
@@ -100,7 +64,10 @@ export async function addProduct(prevState: any, formData: FormData) {
   if (!name || !description || !price) {
     return {
       result: "FAIL",
-      error: `Missing property: name=${name}, description=${description}, price=${price}`,
+      error: `Missing property: ${!name ? "name, " : ""} ${
+        !description ? "description, " : ""
+      } ${!price ? "price" : ""}`,
+      prismaResult: null,
     };
   }
   try {
@@ -114,7 +81,7 @@ export async function addProduct(prevState: any, formData: FormData) {
     });
     revalidatePath("/");
     return {
-      result: "SUCCESS",
+      result: "CREATED",
       error: null,
       prismaResult,
     };
@@ -123,6 +90,7 @@ export async function addProduct(prevState: any, formData: FormData) {
     return {
       result: "FAIL",
       error: `Database error: ${error.message}`,
+      prismaResult: null,
     };
   }
 }
