@@ -18,7 +18,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       className="card w-full bg-base-100 transition-shadow hover:shadow-xl"
     >
       <Image
-        src={product.imageUrl}
+        src={product.imageUrl || "/no-image-placeholder.png"}
         alt={product.name}
         width={720}
         height={100}
