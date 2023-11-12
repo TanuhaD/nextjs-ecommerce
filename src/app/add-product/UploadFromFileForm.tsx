@@ -1,11 +1,10 @@
 "use client";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
+import { MySwal } from "@/lib/sweet-alert";
 import { ChangeEvent, useState } from "react";
-const MySwal = withReactContent(Swal);
 
 export default function UploadFromFileForm() {
   const [json, setJson] = useState<any>(null);
+  const [isloading, setIsloading] = useState<boolean>(false);
 
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
     let file;
@@ -48,6 +47,7 @@ export default function UploadFromFileForm() {
       });
       return;
     }
+    setIsloading(true);
     const response = await fetch("/api/create-many-products", {
       method: "POST",
       headers: {
@@ -55,14 +55,12 @@ export default function UploadFromFileForm() {
       },
       body: JSON.stringify(json),
     });
-
+    setIsloading(false);
     if (response.ok) {
       MySwal.fire({
-        position: "top-end",
         icon: "success",
         title: "Upload successful",
-        showConfirmButton: false,
-        timer: 1500,
+        confirmButtonText: "OK",
       }).then(() => {
         window.location.href = "/";
       });
@@ -90,9 +88,13 @@ export default function UploadFromFileForm() {
       <button
         className="btn-primary btn shadow-md hover:shadow-xl"
         onClick={handleUploadClickBtn}
+        disabled={isloading}
       >
         Upload from file
       </button>
+      {isloading && (
+        <span className="loading loading-spinner loading-lg"></span>
+      )}
     </div>
   );
 }
