@@ -4,6 +4,6 @@ export type ProductType = {
   description: string;
   imageUrl: string;
   price: number;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 };
