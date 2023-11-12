@@ -1,7 +1,8 @@
+import { AddUpdateProductForm } from "@/components/AddUpdateProductForm";
 import { checkAdminUser } from "@/lib/checkAdminUser";
 import { env } from "@/lib/env";
-import { AddProductForm } from "./AddProductForm";
 import UploadFromFileForm from "./UploadFromFileForm";
+import { addProduct } from "./actions";
 export const metadata = {
   metadataBase: new URL(env.BASE_URL),
   title: "Add Product Flowmazon",
@@ -15,7 +16,7 @@ export default async function AddProductPage() {
       <h2 className="mb-3 text-center text-lg font-bold">
         Add product manually
       </h2>
-      <AddProductForm />
+      <AddUpdateProductForm action={addProduct} />
       <div className="divider"></div>
       <h2 className="mb-3 text-center text-lg font-bold">
         Add product from file
