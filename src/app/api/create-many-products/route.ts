@@ -2,6 +2,7 @@ import { prisma } from "@/lib/db/prisma";
 import { fetchImageByLink } from "@/lib/fetchImageByLink";
 import { uploadFileToGoogleStorage } from "@/lib/saveFileToGCS";
 import { Product } from "@prisma/client";
+import { error } from "console";
 import { nanoid } from "nanoid";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
@@ -47,6 +48,7 @@ export async function POST(request: Request) {
             price,
             imageUrl: "",
           });
+          console.error(fetchResult);
           continue;
         }
         const buffer = fetchResult.buffer;
@@ -62,7 +64,7 @@ export async function POST(request: Request) {
           imageUrl: uploadResult.imgUrl,
         });
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     } else {
       productArrayForDB.push({
