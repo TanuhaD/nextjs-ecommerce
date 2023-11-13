@@ -57,6 +57,9 @@ export async function POST(request: Request) {
           buffer,
           originalName
         );
+        if (uploadResult.status === "FAIL") {
+          console.error(uploadResult.error);
+        }
         productArrayForDB.push({
           name,
           description,
