@@ -1,11 +1,19 @@
-import { checkAdminUser } from "@/lib/checkAdminUser";
 import { prisma } from "@/lib/db/prisma";
 import { deleteFileFromGCS } from "@/lib/google-cloud-storage/deleteFileFromGCS";
+import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
+import { authOptions } from "../auth/[...nextauth]/route";
 
 export async function DELETE(request: Request) {
-  checkAdminUser();
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    redirect("/api/auth/signin?callbackUrl=/add-product");
+  } else if (session.user.role !== "ADMIN") {
+    redirect("/forbidden");
+  }
   const { productId } = await request.json();
   try {
     const deletedProduct = await prisma.product.delete({

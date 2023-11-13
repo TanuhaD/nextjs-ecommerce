@@ -1,6 +1,6 @@
 "use server";
 
-import { checkAdminUser } from "@/lib/checkAdminUser";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { prisma } from "@/lib/db/prisma";
 import { fetchImageByLink } from "@/lib/fetchImageByLink";
 import { deleteFileFromGCS } from "@/lib/google-cloud-storage/deleteFileFromGCS";
@@ -8,13 +8,21 @@ import { uploadFileToGoogleStorage } from "@/lib/saveFileToGCS";
 import { EditUpdateServerActionResponse } from "@/types/edit-update-server-action-response";
 
 import { nanoid } from "nanoid";
+import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 export async function updateProduct(
   _: any,
   formData: FormData
 ): Promise<EditUpdateServerActionResponse> {
-  checkAdminUser();
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    redirect("/api/auth/signin?callbackUrl=/add-product");
+  } else if (session.user.role !== "ADMIN") {
+    redirect("/forbidden");
+  }
 
   let imageUrl = "";
   const imageLink = formData.get("imageLink")?.toString();

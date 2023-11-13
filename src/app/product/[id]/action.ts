@@ -1,6 +1,5 @@
 "use server";
 
-import { checkAdminUser } from "@/lib/checkAdminUser";
 import { CreateCart, GetCart } from "@/lib/db/cart";
 import { prisma } from "@/lib/db/prisma";
 import { revalidatePath } from "next/cache";

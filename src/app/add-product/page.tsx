@@ -1,6 +1,8 @@
 import { AddUpdateProductForm } from "@/components/AddUpdateProductForm";
-import { checkAdminUser } from "@/lib/checkAdminUser";
 import { env } from "@/lib/env";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+import { authOptions } from "../api/auth/[...nextauth]/route";
 import UploadFromFileForm from "./UploadFromFileForm";
 import { addProduct } from "./actions";
 export const metadata = {
@@ -9,7 +11,13 @@ export const metadata = {
 };
 
 export default async function AddProductPage() {
-  checkAdminUser();
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    redirect("/api/auth/signin?callbackUrl=/add-product");
+  } else if (session.user.role !== "ADMIN") {
+    redirect("/forbidden");
+  }
   return (
     <div>
       <h1 className="mb-4 text-lg font-bold">Add Product</h1>
