@@ -1,8 +1,7 @@
 import { prisma } from "@/lib/db/prisma";
 import { fetchImageByLink } from "@/lib/fetchImageByLink";
-import { uploadFileToGoogleStorage } from "@/lib/saveFileToGCS";
+import { uploadFileToGoogleStorage } from "@/lib/google-cloud-storage/saveFileToGCS";
 import { Product } from "@prisma/client";
-import { error } from "console";
 import { nanoid } from "nanoid";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";

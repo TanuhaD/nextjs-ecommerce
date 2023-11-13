@@ -4,7 +4,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { prisma } from "@/lib/db/prisma";
 import { fetchImageByLink } from "@/lib/fetchImageByLink";
 import { deleteFileFromGCS } from "@/lib/google-cloud-storage/deleteFileFromGCS";
-import { uploadFileToGoogleStorage } from "@/lib/saveFileToGCS";
+import { uploadFileToGoogleStorage } from "@/lib/google-cloud-storage/saveFileToGCS";
 import { EditUpdateServerActionResponse } from "@/types/edit-update-server-action-response";
 
 import { nanoid } from "nanoid";

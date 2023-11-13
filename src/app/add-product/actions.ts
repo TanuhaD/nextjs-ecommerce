@@ -2,7 +2,6 @@
 
 import { prisma } from "@/lib/db/prisma";
 import { fetchImageByLink } from "@/lib/fetchImageByLink";
-import { uploadFileToGoogleStorage } from "@/lib/saveFileToGCS";
 import { EditUpdateServerActionResponse } from "@/types/edit-update-server-action-response";
 
 import { nanoid } from "nanoid";
@@ -10,6 +9,7 @@ import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { authOptions } from "../api/auth/[...nextauth]/route";
+import { uploadFileToGoogleStorage } from "@/lib/google-cloud-storage/saveFileToGCS";
 
 export async function addProduct(
   _: any,
