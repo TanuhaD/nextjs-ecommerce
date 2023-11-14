@@ -3,6 +3,7 @@ import CartEntry from "./CartEntry";
 import { setProductQuantity } from "./action";
 import { formatPrice } from "@/lib/format";
 import { env } from "@/lib/env";
+import CheckoutBtn from "./CheckoutBtn";
 
 export const metadata = {
   metadataBase: new URL(env.BASE_URL),
@@ -28,9 +29,7 @@ export default async function CartPage() {
         <p className="mb-3 font-bold">
           Total: {formatPrice(cart?.subTotal || 0)}
         </p>
-        <button className="btn-primary btn  shadow-md hover:shadow-2xl sm:w-[200px]">
-          Checkout
-        </button>
+        <CheckoutBtn />
       </div>
     </>
   );
