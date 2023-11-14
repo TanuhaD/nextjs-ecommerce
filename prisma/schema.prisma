@@ -8,14 +8,15 @@ datasource db {
 }
 
 model Product {
-  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
   description String
   imageUrl    String
   name        String
   price       Int
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
   CartItem    CartItem[]
+  OrderItem   OrderItem[]
 
   @@map("products")
 }
@@ -25,7 +26,7 @@ model Cart {
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   items     CartItem[]
-  userId    String?    @db.ObjectId
+  userId    String?    @unique @db.ObjectId
   user      User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("carts")
@@ -42,6 +43,33 @@ model CartItem {
   updatedAt DateTime @updatedAt
 
   @@map("cartitems")
+}
+
+model Order {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  status        String
+  paymentStatus String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  items         OrderItem[]
+  userId        String?     @db.ObjectId
+  user          User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  productId String   @db.ObjectId
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  price     Int
+  quantity  Int
+  orderId   String   @db.ObjectId
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("orderitems")
 }
 
 model Account {
@@ -84,6 +112,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   Cart          Cart[]
+  Order         Order[]
 
   @@map("users")
 }
