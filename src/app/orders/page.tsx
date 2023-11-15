@@ -18,13 +18,12 @@ export default async function OrderPage() {
     redirect("/api/auth/signin?callbackUrl=/add-product");
   }
   const orders = await GetOrders(session.user.id);
-  console.log(orders);
-  if (orders) console.log(orders[0].items[0]);
   return (
     <>
-      <h2 className="mb-6 pt-3 text-center text-3xl font-bold ">
-        Your orders:{session.user.name}
+      <h2 className="mb-6 rounded-md border p-2 pt-3 text-center  font-bold text-info shadow-md sm:text-xl md:text-3xl">
+        Your orders {session.user.name}
       </h2>
+
       {orders?.map((order) => {
         return <OrderList key={order.id} order={order} />;
       })}
