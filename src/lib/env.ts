@@ -9,6 +9,8 @@ const envSchema = zod.object({
   NEXTAUTH_SECRET: zod.string().nonempty(),
   GITHUB_ID: zod.string().nonempty(),
   GITHUB_SECRET: zod.string().nonempty(),
+  TELEGRAM_TOKEN: zod.string().nonempty(),
+  TELEGRAM_CHAT_ID: zod.string().nonempty(),
 });
 
 export const env = envSchema.parse(process.env);
