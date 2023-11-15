@@ -7,8 +7,11 @@ interface OrderItemProps {
 
 export default function OrderItem({ item }: OrderItemProps) {
   return (
-    <li key={item.id}>
-      <div className="card-body">
+    <li
+      key={item.id}
+      className="mb-3 rounded-md border-2 border-solid border-gray-300 p-3 "
+    >
+      <div className="flex items-center gap-4">
         <div className="card-image">
           <Image
             src={item.product.imageUrl || "/no-image-placeholder.png"}
@@ -18,9 +21,11 @@ export default function OrderItem({ item }: OrderItemProps) {
             className="rounded-lg"
           />
         </div>
-        <p className="font-medium text-info">Name:{item.product.name}</p>
-        <p className="font-medium">Price: {item.price / 100} $</p>
-        <p className="font-medium">Quantity: {item.quantity}</p>
+        <div className="gap-4">
+          <p className="font-medium text-info">{item.product.name}</p>
+          <p className="font-medium">Price: {item.price / 100} $</p>
+          <p className="font-medium">Quantity: {item.quantity}</p>
+        </div>
       </div>
     </li>
   );
