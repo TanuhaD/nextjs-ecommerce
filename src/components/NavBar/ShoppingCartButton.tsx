@@ -17,7 +17,7 @@ export default function ShoppingCartButton({ cart }: ShoppingCartButtonProps) {
   }
 
   return (
-    <div className="dropdown-end dropdown">
+    <div className="dropdown-end dropdown-hover dropdown flex">
       <label tabIndex={0} className="btn-ghost btn-circle btn">
         <div className="indicator">
           <svg
