@@ -26,7 +26,7 @@ model Cart {
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   items     CartItem[]
-  userId    String?    @unique @db.ObjectId
+  userId    String?    @db.ObjectId
   user      User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("carts")
@@ -55,7 +55,7 @@ model Order {
   userId        String?     @db.ObjectId
   user          User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
   name          String?
-  email         String?     @unique
+  email         String?
   phone         String?
   address       String?
   comments      String?
