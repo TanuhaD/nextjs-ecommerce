@@ -1,8 +1,8 @@
 "use client";
 
 import profilePicPleholder from "@/assets/profile-pic-placeholder.png";
+import { closeDropdowns } from "@/lib/closeDropdowns";
 import { Session } from "next-auth";
-import { signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 interface UserMenuButtonProps {
@@ -48,9 +48,9 @@ export default function UserMenuButton({ session }: UserMenuButtonProps) {
           </label>
           <ul
             tabIndex={0}
-            className="dropdown-content menu rounded-box z-[1] w-52 bg-base-100 p-2 shadow"
+            className="dropdown-content menu rounded-box z-[1] mt-5 w-52 bg-base-100 p-2 shadow"
           >
-            <li>
+            <li onClick={closeDropdowns}>
               <Link href={"/orders"}>You orders</Link>
             </li>
             <li>
