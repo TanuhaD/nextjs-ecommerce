@@ -36,3 +36,4 @@ next-env.d.ts
 
 .env
 storage-access-nocommit.json
+/deleted
