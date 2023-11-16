@@ -5,13 +5,13 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import { revalidatePath } from "next/cache";
+import { CartWithProducts } from "@/lib/db/cart";
+import { cookies } from "next/dist/client/components/headers";
+import { sendTelegramMessage } from "@/lib/sendTelegramMessage";
+import { env } from "@/lib/env";
 
 export async function placeOrder(_: any, formData: FormData) {
   const session = await getServerSession(authOptions);
-
-  if (!session) {
-    redirect("/api/auth/signin?callbackUrl=/add-product");
-  }
 
   const name = formData.get("name")?.toString();
   const address = formData.get("address")?.toString();
@@ -28,27 +28,28 @@ export async function placeOrder(_: any, formData: FormData) {
   }
 
   try {
-    // const prismaResult = await prisma.order.create({
-    //   data: {
-    //     name,
-    //     address,
-    //     phone,
-    //     email,
-    //     comments,
-    //     status: "PENDING",
-    //   },
-    // });
-    const cart = await prisma.cart.findUnique({
-      where: {
-        userId: session.user.id,
-      },
-      include: { items: { include: { product: true } } },
-    });
+    let cart: CartWithProducts | null = null;
+    if (session) {
+      cart = await prisma.cart.findFirst({
+        where: {
+          userId: session.user.id,
+        },
+        include: { items: { include: { product: true } } },
+      });
+    } else {
+      const localCartId = cookies().get("localCartId")?.value;
+      cart = await prisma.cart.findFirst({
+        where: { id: localCartId },
+        include: { items: { include: { product: true } } },
+      });
+    }
+
     if (!cart) {
       redirect("/fobbiden");
     }
     const prismaResult = await prisma.$transaction(async (tx) => {
-      await tx.order.create({
+      const asyncCart = cart as CartWithProducts;
+      const newOrder = await tx.order.create({
         data: {
           status: "PENDING",
           name,
@@ -56,10 +57,10 @@ export async function placeOrder(_: any, formData: FormData) {
           phone,
           email,
           comments,
-          userId: session.user.id,
+          userId: session?.user.id,
           items: {
             createMany: {
-              data: cart.items.map((item) => ({
+              data: asyncCart.items.map((item) => ({
                 productId: item.productId,
                 quantity: item.quantity,
                 price: item.product.price,
@@ -68,9 +69,20 @@ export async function placeOrder(_: any, formData: FormData) {
           },
         },
       });
+      const orderQuantity = await tx.order.count();
+      console.log("newOrder", newOrder);
+      const link = `${env.BASE_URL}orders/admin/${newOrder.id}/`;
+      // const link = "https://google.com";
+      const telegramMarkupMessage = `<a href="${link}">Order link</a>\n
+      <b>order Number:</b> ${orderQuantity}\n
+      name: ${newOrder.name}\n
+      phone: ${newOrder.phone}
+      `;
+
+      await sendTelegramMessage(telegramMarkupMessage, "HTML");
       await tx.cart.delete({
         where: {
-          id: cart.id,
+          id: asyncCart.id,
         },
       });
       revalidatePath("/", "layout");
