@@ -1,8 +1,8 @@
-import { OrderWithProducts, OrderWithTotal } from "@/lib/db/order";
+import { OrderWithProducts } from "@/lib/db/order";
 import OrderItem from "./OrderItem";
 
 interface OrderListProps {
-  order: OrderWithTotal;
+  order: OrderWithProducts;
 }
 
 export default function OrderList({ order }: OrderListProps) {

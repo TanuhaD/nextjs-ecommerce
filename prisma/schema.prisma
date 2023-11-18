@@ -59,6 +59,7 @@ model Order {
   phone         String?
   address       String?
   comments      String?
+  total         Int
 
   @@map("orders")
 }

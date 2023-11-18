@@ -9,11 +9,12 @@ export type OrderItemWithProduct = Prisma.OrderItemGetPayload<{
   include: { product: true };
 }>;
 
-export type OrderWithTotal = OrderWithProducts & {
-  total: number;
-};
-
-export const GetOrders = async (userId: string) => {
+export interface GetOrdersResult {
+  orders: OrderWithProducts[] | null;
+  error: string | null;
+}
+// orders: (OrderWithProducts & { items: any[] })[] | null;
+export const GetOrders = async (userId: string): Promise<GetOrdersResult> => {
   try {
     const orders = await prisma.order.findMany({
       where: {
@@ -21,18 +22,38 @@ export const GetOrders = async (userId: string) => {
       },
       include: { items: { include: { product: true } } },
     });
-    const processedOrders = orders.map((order) => {
-      const total = order.items.reduce((acc, item) => {
-        return acc + item.price * item.quantity;
-      }, 0);
-      return {
-        ...order,
-        total,
-      };
-    });
-    return processedOrders;
-  } catch (error) {
+    return { orders, error: null };
+  } catch (e) {
+    const error = e as Error;
     console.error(error);
-    return null;
+    return { orders: null, error: error.message };
+  }
+};
+
+export interface GetOrderByIdResult {
+  order: OrderWithProducts | null;
+  error: string | null;
+}
+
+export const GetOrderBuId = async (id: string): Promise<GetOrderByIdResult> => {
+  try {
+    if (!id) {
+      return { order: null, error: "Invalid id" };
+    }
+    console.log("id", id);
+    const order = await prisma.order.findUnique({
+      where: {
+        id: id,
+      },
+      include: { items: { include: { product: true } } },
+    });
+
+    return {
+      order: order || null,
+      error: null,
+    };
+  } catch (e) {
+    const error = e as Error;
+    return { order: null, error: `Database error: ${error.message}` };
   }
 };

@@ -49,6 +49,10 @@ export async function placeOrder(_: any, formData: FormData) {
     }
     const prismaResult = await prisma.$transaction(async (tx) => {
       const asyncCart = cart as CartWithProducts;
+      const total = asyncCart.items.reduce(
+        (acc, item) => item.product.price * item.quantity + acc,
+        0
+      );
       const newOrder = await tx.order.create({
         data: {
           status: "PENDING",
@@ -57,6 +61,7 @@ export async function placeOrder(_: any, formData: FormData) {
           phone,
           email,
           comments,
+          total,
           userId: session?.user.id,
           items: {
             createMany: {
@@ -85,7 +90,7 @@ export async function placeOrder(_: any, formData: FormData) {
           id: asyncCart.id,
         },
       });
-      revalidatePath("/", "layout");
+      revalidatePath(`/cart`);
     });
     return {
       result: "CREATED",

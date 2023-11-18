@@ -24,14 +24,14 @@ export const PlacingAnOrderForm: React.FC<{
   const router = useRouter();
   useEffect(() => {
     const result = state.result || "";
-    console.log(state);
+
     if (result === "CREATED") {
       MySwal.fire({
         icon: "success",
         title: `Product ${result.toLowerCase()} successfully`,
         confirmButtonText: "OK",
       }).then(() => {
-        router.push(`/`);
+        router.push(`/orders/admin/${state.order.id}`);
       });
     } else if (result === "FAIL") {
       MySwal.fire({
