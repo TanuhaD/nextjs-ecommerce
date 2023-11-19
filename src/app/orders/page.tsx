@@ -1,10 +1,9 @@
 import { env } from "@/lib/env";
 
-import { GetOrders } from "@/lib/db/order";
+import { GetOrdersByUserId } from "@/lib/db/order";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "../api/auth/[...nextauth]/route";
-import { formatPrice } from "@/lib/format";
 import OrderList from "./OrderList";
 
 export const metadata = {
@@ -17,7 +16,7 @@ export default async function OrderPage() {
   if (!session) {
     redirect("/api/auth/signin?callbackUrl=/add-product");
   }
-  const { orders, error } = await GetOrders(session.user.id);
+  const { orders, error } = await GetOrdersByUserId(session.user.id);
 
   return (
     <>
