@@ -50,7 +50,6 @@ export const AddUpdateProductForm: React.FC<{
 
   useEffect(() => {
     const result = state.result || "";
-    console.log(state);
     if (result === "CREATED" || result === "UPDATED") {
       MySwal.fire({
         icon: "success",
