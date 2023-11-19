@@ -8,11 +8,11 @@ interface OrderListProps {
 export default function OrderList({ order }: OrderListProps) {
   return (
     <>
-      <ul className=" rounded-md p-6 shadow-md ">
+      <ul className=" rounded-md bg-slate-50 p-6 shadow-md ">
         {order.items.map((item) => {
           return <OrderItem key={item.id} item={item} />;
         })}
-        <div className="flex-auto text-end font-bold">
+        <div className="flex-auto  text-end font-bold">
           <p className="">Total: {order.total / 100} $</p>
           <p className="">
             Created: {order.createdAt.getDate()}.{order.createdAt.getMonth()}.
@@ -21,7 +21,7 @@ export default function OrderList({ order }: OrderListProps) {
           <p>Status: {order.status}</p>
         </div>
       </ul>
-      <div className="divider"></div>
+      <div className="color-primary divider"></div>
     </>
   );
 }
