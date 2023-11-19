@@ -5,6 +5,7 @@ export default function Footer() {
     <footer id="footer" className="bg-neutral p-10 text-neutral-content">
       <div className="footer m-auto max-w-7xl">
         <Link href="/add-product">Add Product</Link>
+        <Link href="/orders/admin">All orders</Link>
         <div>
           <span className="footer-title">Services</span>
           <a className="link-hover link">Branding</a>
