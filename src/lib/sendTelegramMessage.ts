@@ -8,7 +8,6 @@ export async function sendTelegramMessage(message: string, parseMode = "HTML") {
     text: message,
     parse_mode: parseMode,
   });
-  console.log(body);
   try {
     const response = await fetch(apiUrl, {
       method: "POST",
@@ -19,7 +18,6 @@ export async function sendTelegramMessage(message: string, parseMode = "HTML") {
     });
 
     const data = await response.json();
-    console.log("Telegram API Response:", data);
   } catch (error) {
     console.error("Error sending Telegram message:", error);
   }
