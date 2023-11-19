@@ -31,7 +31,7 @@ export const PlacingAnOrderForm: React.FC<{
         title: `Product ${result.toLowerCase()} successfully`,
         confirmButtonText: "OK",
       }).then(() => {
-        router.push(`/orders/admin/${state.order.id}`);
+        router.push(`/orders`);
       });
     } else if (result === "FAIL") {
       MySwal.fire({
