@@ -75,7 +75,6 @@ export async function placeOrder(_: any, formData: FormData) {
         },
       });
       const orderQuantity = await tx.order.count();
-      console.log("newOrder", newOrder);
       const link = `${env.BASE_URL}orders/admin/${newOrder.id}/`;
       // const link = "https://google.com";
       const telegramMarkupMessage = `<a href="${link}">Order link</a>\n
