@@ -22,7 +22,7 @@ const AdminOrderPage: React.FC<AdminOrderPageProps> = async ({
   }
 
   return (
-    <div>
+    <div className="max-w-full">
       <OrderEditingForm orderResult={order} />
     </div>
   );
