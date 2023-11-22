@@ -69,7 +69,6 @@ export const GetAllOrders =
       const orders = await prisma.order.findMany({
         include: { items: { include: { product: true } } },
       });
-      console.log(orders);
       return { orders, error: null };
     } catch (e) {
       const error = e as Error;
@@ -77,3 +76,26 @@ export const GetAllOrders =
       return { orders: null, error: error.message };
     }
   };
+
+export const findOrdersByQuery = async (
+  query: string
+): Promise<GetAllOrdersWithProductsResult> => {
+  try {
+    const orders = await prisma.order.findMany({
+      where: {
+        OR: [
+          { name: { contains: query, mode: "insensitive" } },
+          { email: { contains: query, mode: "insensitive" } },
+          { address: { contains: query, mode: "insensitive" } },
+        ],
+      },
+      orderBy: { id: "desc" },
+      include: { items: { include: { product: true } } },
+    });
+    return { orders, error: null };
+  } catch (e) {
+    const error = e as Error;
+    console.error(error);
+    return { orders: null, error: error.message };
+  }
+};
