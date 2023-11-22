@@ -6,6 +6,13 @@ module.exports = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   plugins: [require("daisyui")],
+  theme: {
+    screens: {
+      sm: "320px",
+      md: "768px",
+      lg: "1024px",
+    },
+  },
   daisyui: {
     themes: [
       {
