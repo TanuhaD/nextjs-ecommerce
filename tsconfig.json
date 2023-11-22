@@ -28,7 +28,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/components/PaginationBar"
+    "src/components/PaginationBar",
+    "src/app/api/update-order-admin"
   ],
   "exclude": ["node_modules"]
 }
