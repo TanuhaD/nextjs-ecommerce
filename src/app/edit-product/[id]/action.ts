@@ -68,7 +68,7 @@ export async function updateProduct(
       ) {
         const deleteResult = await deleteFileFromGCS(deleteImageUrl);
         if (deleteResult.result === "FAIL") {
-          console.log(deleteResult.error);
+          console.error(deleteResult.error);
         }
       }
     } catch (e) {
