@@ -1,6 +1,8 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import AdminOrderContextProvider from "./AdminOrderContext";
 
 export default async function AdminLayout({
   children,
@@ -11,5 +13,5 @@ export default async function AdminLayout({
   if (session?.user.role !== "ADMIN") {
     redirect("/forbidden");
   }
-  return <>{children}</>;
+  return <AdminOrderContextProvider>{children}</AdminOrderContextProvider>;
 }
