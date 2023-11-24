@@ -27,7 +27,7 @@ export default function OrderInfoProduct({
   };
   return (
     <li className="mb-3 rounded-md border-2 border-solid border-gray-300 p-3  ">
-      <div className="flex items-center gap-4 sm:flex-col sm:items-start md:flex  lg:flex ">
+      <div className="flex items-center gap-4 sm:flex-col sm:items-start md:flex-row  ">
         <div className="card-image">
           <Image
             src={item.product.imageUrl || "/no-image-placeholder.png"}
