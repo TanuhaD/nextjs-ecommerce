@@ -32,7 +32,7 @@ const AllOrdersAdminPage = async () => {
                       );
                     })}
                   </ul>
-                  <div className=" flex items-center justify-between gap-2 rounded-md border  p-4 font-semibold  shadow-md">
+                  <div className="flex flex-col items-center justify-between gap-2 rounded-md border  p-4 font-semibold  shadow-md md:flex-row">
                     <div>
                       <p className="font-medium sm:text-sm md:text-2xl">
                         Totall: {order.total / 100} $
