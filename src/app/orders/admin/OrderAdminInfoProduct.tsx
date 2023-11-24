@@ -14,7 +14,7 @@ export default function OrderAdminInfoProduct({ item }: OrderInfoProductProps) {
     <>
       <li
         key={item.product.id}
-        className="mb-3 items-center gap-4 rounded-md border-2 border-solid border-gray-300 p-3  sm:flex "
+        className="mb-3 flex items-center gap-4 rounded-md border-2 border-solid border-gray-300  p-3 "
       >
         <div className="card-image">
           <Image
