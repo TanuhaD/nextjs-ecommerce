@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext } from "react";
-export const AdminOrderContext = createContext<object | null>(null);
+export const AdminOrderContext = createContext<string | null>(null);
 
 interface AdminOrderContextProviderProps {
   children: React.ReactNode;
