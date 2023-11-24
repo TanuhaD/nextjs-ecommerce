@@ -1,5 +1,6 @@
 import { OrderItemWithProduct, OrderWithProducts } from "@/lib/db/order";
 import { prisma } from "@/lib/db/prisma";
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -24,10 +25,13 @@ export async function POST(request: Request) {
               },
             };
           }),
+          deleteMany: body.items
+            .filter((item: OrderItemWithProduct) => item.quantity === 0)
+            .map((item: OrderItemWithProduct) => ({ id: item.id })),
         },
       },
     });
-
+    revalidatePath(`/api/orders/${order.id}`);
     return NextResponse.json({ order }, { status: 200 });
   } catch (error: any) {
     console.log(error);
