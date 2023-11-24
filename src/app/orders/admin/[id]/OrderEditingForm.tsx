@@ -3,6 +3,8 @@
 import { GetOrderByIdResult } from "@/lib/db/order";
 import { useEffect, useMemo, useState } from "react";
 import OrderInfoProduct from "./OrderInfoProduct";
+import { MySwal } from "@/lib/sweet-alert";
+import { useRouter } from "next/navigation";
 
 interface OrderEditingFormProps {
   orderResult: GetOrderByIdResult;
@@ -18,7 +20,7 @@ export default function OrderEditingForm({
   const [comments, setComments] = useState(order?.comments || "");
   const [total, setTotal] = useState(order?.total || 0);
   const [status, setStatus] = useState(order?.status || "");
-
+  const router = useRouter();
   useEffect(() => {
     console.log(orderItems);
     setTotal(
@@ -46,7 +48,7 @@ export default function OrderEditingForm({
     });
   };
 
-  const handleOrderChange = () => {
+  const handleOrderChange = async () => {
     const newOrder = {
       ...order,
       items: orderItems,
@@ -57,10 +59,20 @@ export default function OrderEditingForm({
       total,
     };
     console.log("newOrder", newOrder);
-    fetch("/api/update-order-admin", {
+    const result = await fetch("/api/update-order-admin", {
       method: "POST",
       body: JSON.stringify(newOrder),
     });
+    const data = await result.json();
+    if (data.order) {
+      MySwal.fire({
+        icon: "success",
+        title: `Order ${data.order.id} updated successfully`,
+        confirmButtonText: "OK",
+      }).then(() => {
+        router.refresh();
+      });
+    }
   };
 
   if (error) {
@@ -141,9 +153,9 @@ export default function OrderEditingForm({
           {order.createdAt.getFullYear()}
         </p>
         <p className="font-bold sm:text-sm md:text-2xl">
-          Status: {status}
+          Status:
           <select
-            className="select-warning select mb-3 ml-3 mt-3 w-full max-w-xs sm:text-sm md:text-2xl"
+            className="select-ghost select mb-3 ml-3 mt-3 w-full max-w-xs sm:text-sm md:text-2xl"
             defaultValue={status}
             onChange={(e) => setStatus(e.target.value)}
           >
@@ -160,7 +172,7 @@ export default function OrderEditingForm({
       </div>
       <div className="flex justify-end">
         <button onClick={handleOrderChange} className="btn-primary btn ">
-          Change order
+          Save order
         </button>
       </div>
     </div>
