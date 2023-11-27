@@ -1,0 +1,36 @@
+import { env } from "@/lib/env";
+import { getServerSession } from "next-auth";
+import { Inter } from "next/font/google";
+import { redirect } from "next/navigation";
+import { authOptions } from "../api/auth/[...nextauth]/route";
+import "@/styles/globals.css";
+import AdminNavBar from "@/components/AdminComponents/AdminNavBar/AdminNavBar";
+
+const inter = Inter({ subsets: ["latin"] });
+
+export const metadata = {
+  metadataBase: new URL(env.BASE_URL),
+  title: "Flowmazon",
+  description: "We make your wallet cry",
+};
+
+const RootAdminDashboardLayout = async ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const session = await getServerSession(authOptions);
+  if (session?.user.role !== "ADMIN") {
+    redirect("/forbidden");
+  }
+  return (
+    <html lang="en">
+      <body className={inter.className}>
+        <AdminNavBar />
+        <main className=" m-auto min-w-[300px] max-w-7xl p-4">{children}</main>
+      </body>
+    </html>
+  );
+};
+
+export default RootAdminDashboardLayout;
