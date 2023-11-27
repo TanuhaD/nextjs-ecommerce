@@ -4,7 +4,6 @@ import { EditUpdateServerActionResponse } from "@/types/edit-update-server-actio
 import { ProductType } from "@/types/product";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-// @ts-ignore
 import { useFormState, useFormStatus } from "react-dom";
 
 const initialState: EditUpdateServerActionResponse = {
@@ -13,16 +12,20 @@ const initialState: EditUpdateServerActionResponse = {
   prismaResult: null,
 };
 
-export const AddUpdateProductForm: React.FC<{
-  action: (
-    prevState: any,
-    formData: FormData
-  ) => Promise<{
-    result: string | null;
-    error: string | null;
-  }>;
+type Action = (
+  prevState: any,
+  formData: FormData,
+) => Promise<EditUpdateServerActionResponse>;
+
+interface AddUpdateProductFormProps {
+  action: Action;
   productInfo?: ProductType;
-}> = ({ action, productInfo }) => {
+}
+
+export const AddUpdateProductForm: React.FC<AddUpdateProductFormProps> = ({
+  action,
+  productInfo,
+}) => {
   const [state, formAction] = useFormState(action, initialState);
   const { pending } = useFormStatus();
   const [linkValue, setLinkValue] = useState(productInfo?.imageUrl || "");
@@ -56,7 +59,7 @@ export const AddUpdateProductForm: React.FC<{
         title: `Product ${result.toLowerCase()} successfully`,
         confirmButtonText: "OK",
       }).then(() => {
-        router.push(`/product/${state.prismaResult?.id}`);
+        router.push(`/dashboard/product/${productInfo?.id}`);
       });
     } else if (result === "FAIL") {
       MySwal.fire({
@@ -66,7 +69,7 @@ export const AddUpdateProductForm: React.FC<{
         confirmButtonText: "OK",
       });
     }
-  }, [router, state]);
+  }, [productInfo?.id, router, state]);
 
   return (
     <form action={formAction}>
@@ -77,14 +80,14 @@ export const AddUpdateProductForm: React.FC<{
         required
         name="name"
         placeholder="Name"
-        className="input-bordered input mb-3 w-full shadow-md"
+        className="input input-bordered mb-3 w-full shadow-md"
         defaultValue={productInfo?.name}
       />
       <textarea
         required
         name="description"
         placeholder="Description"
-        className="textarea-bordered textarea mb-3 w-full shadow-md"
+        className="textarea textarea-bordered mb-3 w-full shadow-md"
         defaultValue={productInfo?.description}
       />
       <input
@@ -99,18 +102,18 @@ export const AddUpdateProductForm: React.FC<{
         disabled={fileValue !== null}
         placeholder="Image Link"
         type="url"
-        className="input-bordered input mb-3 w-full shadow-md"
+        className="input input-bordered mb-3 w-full shadow-md"
       />
       <input
         name="imageFile"
         onChange={handleFileChange}
         disabled={linkValue !== ""}
-        className="file-input-bordered file-input-warning file-input mb-3 mr-7 w-full max-w-xs"
+        className="file-input file-input-bordered file-input-warning mb-3 mr-7 w-full max-w-xs"
         type="file"
         accept="image/*"
       />
       <button
-        className="btn-primary btn shadow-md hover:shadow-xl"
+        className="btn btn-primary shadow-md hover:shadow-xl"
         type="button"
         onClick={clearImageInputs}
       >
@@ -121,11 +124,11 @@ export const AddUpdateProductForm: React.FC<{
         name="price"
         placeholder="Price"
         type="number"
-        className="input-bordered input mb-3 w-full shadow-md "
+        className="input input-bordered mb-3 w-full shadow-md "
         defaultValue={productInfo?.price}
       />
       <button
-        className={`btn-primary btn-block btn shadow-md hover:shadow-xl`}
+        className={`btn btn-primary btn-block shadow-md hover:shadow-xl`}
         type="submit"
         disabled={pending}
       >

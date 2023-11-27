@@ -11,7 +11,7 @@ export default function EditProductButton({
     <div className="mt-3 flex items-center gap-2">
       <Link
         className="btn-primary btn shadow-md hover:shadow-xl"
-        href={`/edit-product/${productId}`}
+        href={`/dashboard/edit-product/${productId}`}
       >
         Edit Product
       </Link>

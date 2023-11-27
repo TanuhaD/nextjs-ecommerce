@@ -3,12 +3,12 @@
 import { prisma } from "@/lib/db/prisma";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { authOptions } from "../api/auth/[...nextauth]/route";
 import { revalidatePath } from "next/cache";
 import { CartWithProducts } from "@/lib/db/cart";
 import { cookies } from "next/dist/client/components/headers";
 import { sendTelegramMessage } from "@/lib/sendTelegramMessage";
 import { env } from "@/lib/env";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export async function placeOrder(_: any, formData: FormData) {
   const session = await getServerSession(authOptions);
@@ -51,7 +51,7 @@ export async function placeOrder(_: any, formData: FormData) {
       const asyncCart = cart as CartWithProducts;
       const total = asyncCart.items.reduce(
         (acc, item) => item.product.price * item.quantity + acc,
-        0
+        0,
       );
       const newOrder = await tx.order.create({
         data: {

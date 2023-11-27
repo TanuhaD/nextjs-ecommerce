@@ -9,12 +9,16 @@ export type OrderItemWithProduct = Prisma.OrderItemGetPayload<{
   include: { product: true };
 }>;
 
+export type OrderWithProductsAndUser = Prisma.OrderGetPayload<{
+  include: { items: { include: { product: true } }; user: true };
+}>;
+
 export interface GetOrdersByUserIdResult {
   orders: OrderWithProducts[] | null;
   error: string | null;
 }
 export const GetOrdersByUserId = async (
-  userId: string
+  userId: string,
 ): Promise<GetOrdersByUserIdResult> => {
   try {
     const orders = await prisma.order.findMany({
@@ -58,16 +62,16 @@ export const GetOrderBuId = async (id: string): Promise<GetOrderByIdResult> => {
   }
 };
 
-export interface GetAllOrdersWithProductsResult {
-  orders: OrderWithProducts[] | null;
+export interface GetAllOrdersWithProductsAndUserResult {
+  orders: OrderWithProductsAndUser[] | null;
   error: string | null;
 }
 
 export const GetAllOrders =
-  async (): Promise<GetAllOrdersWithProductsResult> => {
+  async (): Promise<GetAllOrdersWithProductsAndUserResult> => {
     try {
       const orders = await prisma.order.findMany({
-        include: { items: { include: { product: true } } },
+        include: { items: { include: { product: true } }, user: true },
       });
       return { orders, error: null };
     } catch (e) {
@@ -76,9 +80,12 @@ export const GetAllOrders =
       return { orders: null, error: error.message };
     }
   };
-
+export interface GetAllOrdersWithProductsResult {
+  orders: OrderWithProducts[] | null;
+  error: string | null;
+}
 export const findOrdersByQuery = async (
-  query: string
+  query: string,
 ): Promise<GetAllOrdersWithProductsResult> => {
   try {
     const orders = await prisma.order.findMany({

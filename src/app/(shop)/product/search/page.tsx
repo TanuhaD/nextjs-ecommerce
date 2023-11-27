@@ -1,5 +1,6 @@
 import ProductCard from "@/components/ProductCard";
 import { prisma } from "@/lib/db/prisma";
+import { env } from "@/lib/env";
 
 interface SearchPageProps {
   searchParams: { query: string };
@@ -7,6 +8,7 @@ interface SearchPageProps {
 
 export function generateMetadata({ searchParams: { query } }: SearchPageProps) {
   return {
+    metadataBase: new URL(env.BASE_URL),
     title: `Search:${query} - Flowmazon`,
   };
 }
@@ -39,7 +41,7 @@ export default async function SearchPage({
   }
 
   return (
-    <div className="my-4 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+    <div className="xl:grid-cols-3 my-4 grid grid-cols-1 gap-4 md:grid-cols-2">
       {products.map((product) => {
         return <ProductCard key={product.id} product={product} />;
       })}

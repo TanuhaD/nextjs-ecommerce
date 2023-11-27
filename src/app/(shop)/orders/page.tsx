@@ -3,8 +3,8 @@ import { env } from "@/lib/env";
 import { GetOrdersByUserId } from "@/lib/db/order";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { authOptions } from "../api/auth/[...nextauth]/route";
 import OrderList from "./OrderList";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export const metadata = {
   metadataBase: new URL(env.BASE_URL),

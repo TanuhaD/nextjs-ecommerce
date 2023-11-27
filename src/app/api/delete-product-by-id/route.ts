@@ -23,9 +23,10 @@ export async function DELETE(request: Request) {
       deleteFileFromGCS(deletedProduct.imageUrl);
     }
     revalidatePath("/");
+    revalidatePath("/dashboard");
     return NextResponse.json(
       { message: "'Product deleted successfully'" },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (e) {
     const error = e as Error;

@@ -27,7 +27,8 @@ export default function DeleteProductButton({
         text: "Your product has been deleted.",
         icon: "success",
       }).then(() => {
-        window.location.href = "/";
+        // window.location.href = "/";
+        router.push("/dashboard");
       });
     } else {
       const { message } = await response.json();
@@ -59,7 +60,7 @@ export default function DeleteProductButton({
   return (
     <div className="mt-3 flex items-center gap-2">
       <button
-        className="btn-primary btn shadow-md hover:shadow-xl"
+        className="btn btn-primary shadow-md hover:shadow-xl"
         onClick={hundleClickBtn}
       >
         Delete Product

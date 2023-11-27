@@ -3,14 +3,10 @@ import { GetCart } from "@/lib/db/cart";
 import { prisma } from "@/lib/db/prisma";
 import { Metadata } from "next";
 import Image from "next/image";
-import { notFound, redirect } from "next/navigation";
-import { cache } from "react";
+import { notFound } from "next/navigation";
 import AddCartButton from "./AddCartButton";
 import { incrementProductQuantity } from "./action";
-import EditProductButton from "./EditProductButton";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import DeleteProductButton from "./DeleteProductButton";
+import { env } from "@/lib/env";
 
 interface ProductPageProps {
   params: {
@@ -36,6 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = params;
   const product = await getProduct(id);
   return {
+    metadataBase: new URL(env.BASE_URL),
     title: product.name,
     description: product.description,
     openGraph: {
@@ -47,11 +44,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 const ProductPage: React.FC<ProductPageProps> = async ({ params: { id } }) => {
   const product = await getProduct(id);
   const cart = await GetCart();
-  const session = await getServerSession(authOptions);
+
   let isProductInCart = false;
   if (cart) {
     isProductInCart = cart.items.some(
-      (item) => item.productId === id
+      (item) => item.productId === id,
     ) as boolean;
   }
 
@@ -74,12 +71,6 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params: { id } }) => {
           incrementProductQuantity={incrementProductQuantity}
           isProductInCart={isProductInCart}
         />
-        {session?.user.role === "ADMIN" && (
-          <EditProductButton productId={product.id} />
-        )}
-        {session?.user.role === "ADMIN" && (
-          <DeleteProductButton productId={product.id} />
-        )}
       </div>
     </div>
   );
