@@ -9,7 +9,6 @@ import OrderAdminInfoCustomer from "./OrderAdminInfoCustomer";
 
 const AllOrdersAdminPage = async () => {
   const { orders, error } = await GetAllOrders();
-  console.log(orders);
   return (
     <>
       {error && <div>Something went wrong... Try again later.</div>}

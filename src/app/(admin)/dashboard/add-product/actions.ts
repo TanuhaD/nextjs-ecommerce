@@ -10,7 +10,7 @@ import { revalidatePath } from "next/cache";
 
 export async function addProduct(
   _: any,
-  formData: FormData
+  formData: FormData,
 ): Promise<EditUpdateServerActionResponse> {
   let imageUrl = "";
   const imageFile = formData.get("imageFile") as unknown as File;
@@ -35,7 +35,7 @@ export async function addProduct(
     if (buffer && originalName) {
       const uploadResult = await uploadFileToGoogleStorage(
         buffer,
-        originalName
+        originalName,
       );
       if (uploadResult.status === "FAIL") {
         return {

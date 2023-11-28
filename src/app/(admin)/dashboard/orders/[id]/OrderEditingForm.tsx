@@ -22,11 +22,10 @@ export default function OrderEditingForm({
   const [status, setStatus] = useState(order?.status || "");
   const router = useRouter();
   useEffect(() => {
-    console.log(orderItems);
     setTotal(
       orderItems.reduce((acc, item) => {
         return acc + item.price * item.quantity;
-      }, 0)
+      }, 0),
     );
   }, [orderItems]);
 
@@ -37,12 +36,11 @@ export default function OrderEditingForm({
     itemId: string;
     newQuantity: string;
   }) => {
-    console.log("newQuantity", newQuantity);
     setOrderItems((prev) => {
       const newOrders = prev.map((order) =>
         order.id === itemId
           ? { ...order, quantity: parseInt(newQuantity) || 0 }
-          : order
+          : order,
       );
       return newOrders;
     });
@@ -58,7 +56,6 @@ export default function OrderEditingForm({
       comments,
       total,
     };
-    console.log("newOrder", newOrder);
     const result = await fetch("/api/update-order-admin", {
       method: "POST",
       body: JSON.stringify(newOrder),
@@ -92,7 +89,7 @@ export default function OrderEditingForm({
           Name:{" "}
           <input
             type="text"
-            className="input-ghost input ml-2 w-full max-w-xs sm:text-sm md:text-2xl"
+            className="input input-ghost ml-2 w-full max-w-xs sm:text-sm md:text-2xl"
             onChange={(e) => {
               setName(e.target.value);
             }}
@@ -103,7 +100,7 @@ export default function OrderEditingForm({
           Phone:
           <input
             type="text"
-            className="input-ghost input ml-2 w-full max-w-xs sm:text-sm md:text-2xl"
+            className="input input-ghost ml-2 w-full max-w-xs sm:text-sm md:text-2xl"
             onChange={(e) => {
               setPhone(e.target.value);
             }}
@@ -114,7 +111,7 @@ export default function OrderEditingForm({
           Address:
           <input
             type="text"
-            className="input-ghost input ml-2 w-full max-w-xs sm:text-sm md:text-2xl"
+            className="input input-ghost ml-2 w-full max-w-xs sm:text-sm md:text-2xl"
             onChange={(e) => {
               setAddress(e.target.value);
             }}
@@ -125,7 +122,7 @@ export default function OrderEditingForm({
           Comments:
           <input
             type="text"
-            className="input-ghost input ml-2 w-full max-w-xs sm:text-sm md:text-2xl"
+            className="input input-ghost ml-2 w-full max-w-xs sm:text-sm md:text-2xl"
             onChange={(e) => {
               setComments(e.target.value);
             }}
@@ -155,7 +152,7 @@ export default function OrderEditingForm({
         <p className="font-bold sm:text-sm md:text-2xl">
           Status:
           <select
-            className="select-ghost select mb-3 ml-3 mt-3 w-full max-w-xs sm:text-sm md:text-2xl"
+            className="select select-ghost mb-3 ml-3 mt-3 w-full max-w-xs sm:text-sm md:text-2xl"
             defaultValue={status}
             onChange={(e) => setStatus(e.target.value)}
           >
@@ -171,7 +168,7 @@ export default function OrderEditingForm({
         </p>
       </div>
       <div className="flex justify-end">
-        <button onClick={handleOrderChange} className="btn-primary btn ">
+        <button onClick={handleOrderChange} className="btn btn-primary ">
           Save order
         </button>
       </div>
