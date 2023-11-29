@@ -1,8 +1,7 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import AdminOrderContextProvider from "./AdminOrderContext";
+import { authOptions } from "@/app/api/auth/authOptions";
 
 export default async function AdminLayout({
   children,
