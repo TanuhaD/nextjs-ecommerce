@@ -8,7 +8,7 @@ import { CartWithProducts } from "@/lib/db/cart";
 import { cookies } from "next/dist/client/components/headers";
 import { sendTelegramMessage } from "@/lib/sendTelegramMessage";
 import { env } from "@/lib/env";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/authOptions";
 
 export async function placeOrder(_: any, formData: FormData) {
   const session = await getServerSession(authOptions);
