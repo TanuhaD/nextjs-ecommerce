@@ -2,9 +2,9 @@ import { env } from "@/lib/env";
 import { getServerSession } from "next-auth";
 import { Inter } from "next/font/google";
 import { redirect } from "next/navigation";
-import { authOptions } from "../api/auth/[...nextauth]/route";
 import "@/styles/globals.css";
 import AdminNavBar from "@/components/AdminComponents/AdminNavBar/AdminNavBar";
+import { authOptions } from "../api/auth/authOptions";
 
 const inter = Inter({ subsets: ["latin"] });
 
