@@ -1,6 +1,6 @@
 "use server";
 
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/authOptions";
 import { prisma } from "@/lib/db/prisma";
 import { fetchImageByLink } from "@/lib/fetchImageByLink";
 import { deleteFileFromGCS } from "@/lib/google-cloud-storage/deleteFileFromGCS";
@@ -14,7 +14,7 @@ import { redirect } from "next/navigation";
 
 export async function updateProduct(
   _: any,
-  formData: FormData
+  formData: FormData,
 ): Promise<EditUpdateServerActionResponse> {
   const session = await getServerSession(authOptions);
 
@@ -49,7 +49,7 @@ export async function updateProduct(
       if (buffer && originalName) {
         const uploadResult = await uploadFileToGoogleStorage(
           buffer,
-          originalName
+          originalName,
         );
         if (uploadResult.status === "FAIL") {
           return {
