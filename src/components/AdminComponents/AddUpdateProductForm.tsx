@@ -59,7 +59,11 @@ export const AddUpdateProductForm: React.FC<AddUpdateProductFormProps> = ({
         title: `Product ${result.toLowerCase()} successfully`,
         confirmButtonText: "OK",
       }).then(() => {
-        router.push(`/dashboard/product/${productInfo?.id}`);
+        if (state.prismaResult?.id) {
+          router.push(`/dashboard/product/${state.prismaResult.id}}`);
+        } else {
+          router.push(`/dashboard`);
+        }
       });
     } else if (result === "FAIL") {
       MySwal.fire({
