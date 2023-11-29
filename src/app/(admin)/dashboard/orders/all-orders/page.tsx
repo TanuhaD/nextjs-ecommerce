@@ -45,7 +45,7 @@ export default async function Home({
               <p className="py-6">{featuredProduct.description}</p>
               <Link
                 href={"/product/" + featuredProduct.id}
-                className="btn-primary btn"
+                className="btn btn-primary"
               >
                 Check it out
               </Link>
