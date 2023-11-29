@@ -3,7 +3,7 @@ import { cookies } from "next/dist/client/components/headers";
 import { prisma } from "./prisma";
 import { cache } from "react";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/authOptions";
 
 export type CartWithProducts = Prisma.CartGetPayload<{
   include: { items: { include: { product: true } } };
@@ -45,7 +45,7 @@ export const GetCart = async (): Promise<ShoppingCart | null> => {
     size: cart.items.reduce((acc, item) => acc + item.quantity, 0),
     subTotal: cart.items.reduce(
       (acc, item) => acc + item.quantity * item.product.price,
-      0
+      0,
     ),
   };
 };
