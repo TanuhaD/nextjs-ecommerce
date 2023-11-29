@@ -6,9 +6,32 @@ import OrderAdminInfoProduct from "./OrderAdminInfoProduct";
 import OrderAdminSearch from "./OrderAdminSearch";
 import OrderAdminInfoUser from "./OrderAdminInfoUser";
 import OrderAdminInfoCustomer from "./OrderAdminInfoCustomer";
+import PaginationBar from "@/components/PaginationBar/PaginationBar";
+import { prisma } from "@/lib/db/prisma";
 
-const AllOrdersAdminPage = async () => {
+interface AllOrdersAdminPageProps {
+  searchParams: { page: string };
+}
+const AllOrdersAdminPage = async ({
+  searchParams: { page = "1" },
+}: AllOrdersAdminPageProps) => {
   const { orders, error } = await GetAllOrders();
+
+  const currentPage = parseInt(page);
+
+  const pageSize = 6;
+  const heroItemCount = 1;
+
+  const totalItemCount = await prisma.product.count();
+
+  const totalPages = Math.ceil((totalItemCount - heroItemCount) / pageSize);
+
+  const products = await prisma.product.findMany({
+    orderBy: { id: "desc" },
+    skip:
+      (currentPage - 1) * pageSize + (currentPage === 1 ? 0 : heroItemCount),
+    take: pageSize + (currentPage === 1 ? heroItemCount : 0),
+  });
   return (
     <>
       {error && <div>Something went wrong... Try again later.</div>}
@@ -35,7 +58,7 @@ const AllOrdersAdminPage = async () => {
                       );
                     })}
                   </ul>
-                  <div className="flex flex-col items-center justify-between gap-2 rounded-md border  p-4 font-semibold  shadow-md md:flex-row">
+                  <div className="flex flex-col justify-between gap-2 rounded-md border p-4  font-semibold shadow-md  md:flex-row md:items-center">
                     <div>
                       <p className="font-medium sm:text-sm md:text-2xl">
                         Totall: {order.total / 100} $
@@ -63,6 +86,14 @@ const AllOrdersAdminPage = async () => {
               </li>
             ))}
           </ul>
+          {totalPages > 1 && (
+            <div className="m-4 flex justify-center">
+              <PaginationBar
+                currentPage={currentPage}
+                totalPages={totalPages}
+              />
+            </div>
+          )}
         </>
       )}
     </>
