@@ -1,25 +1,44 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { MySwal } from "@/lib/sweet-alert";
-// @ts-ignore
+
 import { useFormState, useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
+import { ZodError, z } from "zod";
+
+export interface validationFields {
+  name?: string;
+  phone?: string;
+  email?: string;
+  address?: string;
+  comments?: string;
+}
 
 const initialState = {
   result: null,
   error: null,
   prismaResult: null,
 };
+
+const schema = z.object({
+  name: z.string().min(3),
+  phone: z.string().min(3),
+  email: z.string().email(),
+  address: z.string().min(3),
+  comments: z.string().max(1000),
+});
+
 export const PlacingAnOrderForm: React.FC<{
   action: (
     _: any,
-    formData: FormData
+    formData: FormData,
   ) => Promise<{
     result: string | null;
     error: string | null;
   }>;
 }> = ({ action }) => {
   const [state, formAction] = useFormState(action, initialState);
+  const [nameError, setNameError] = useState("");
   const { pending } = useFormStatus();
   const router = useRouter();
   useEffect(() => {
@@ -42,44 +61,77 @@ export const PlacingAnOrderForm: React.FC<{
       });
     }
   }, [state, router]);
+
+  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const formData = new FormData(event.currentTarget);
+    const formValues = Object.fromEntries(formData.entries());
+
+    try {
+      schema.parse(formValues);
+    } catch (e) {
+      event.preventDefault();
+      const error = e as z.ZodError;
+      const validationErrors: validationFields = {};
+      error.errors.forEach((err) => {
+        const field = err.path.join(".") as keyof validationFields;
+        validationErrors[field] = err.message;
+      });
+      if (validationErrors.name) {
+        setNameError(validationErrors.name);
+      }
+    }
+  };
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNameError("");
+  };
   return (
     <div className=" flex justify-center">
-      <form className="max-w-md" action={formAction}>
-        <input
-          required
-          name="name"
-          placeholder="Name"
-          type="text"
-          className="input-bordered input mb-3 w-full shadow-md"
-        />
+      <form
+        onSubmit={handleFormSubmit}
+        className="max-w-md"
+        action={formAction}
+      >
+        <label className="form-control mb-3">
+          <input
+            onChange={handleNameChange}
+            required
+            name="name"
+            placeholder="Name"
+            type="text"
+            className="input input-bordered  w-full shadow-md"
+          />
+          <div className="label">
+            <span className="label-text-alt text-red-700">{nameError}</span>
+          </div>
+        </label>
 
         <input
           required
           name="phone"
           type="text"
           placeholder="Phone"
-          className="input-bordered input mb-3 w-full shadow-md"
+          className="input input-bordered mb-3 w-full shadow-md"
         />
         <input
           name="email"
           placeholder="Email"
           type="text"
-          className="input-bordered input mb-3 w-full shadow-md"
+          className="input input-bordered mb-3 w-full shadow-md"
         />
         <input
           name="address"
           placeholder="Address"
-          className="input-bordered input mb-3 w-full shadow-md"
+          className="input input-bordered mb-3 w-full shadow-md"
           type="text"
         />
         <textarea
           name="comments"
           placeholder="Comments on the order"
-          className="textarea-bordered textarea mb-3 w-full shadow-md"
+          className="textarea textarea-bordered mb-3 w-full shadow-md"
         />
 
         <button
-          className={`btn-primary btn-block btn shadow-md hover:shadow-xl`}
+          className={`btn btn-primary btn-block shadow-md hover:shadow-xl`}
           type="submit"
           disabled={pending}
         >
