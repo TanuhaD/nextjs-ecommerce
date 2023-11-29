@@ -1,10 +1,10 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { prisma } from "@/lib/db/prisma";
 import { env } from "@/lib/env";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { updateProduct } from "./action";
 import { AddUpdateProductForm } from "@/components/AdminComponents/AddUpdateProductForm";
+import { authOptions } from "@/app/api/auth/authOptions";
 
 interface ProductPageProps {
   params: {
