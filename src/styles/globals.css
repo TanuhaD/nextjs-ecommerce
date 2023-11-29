@@ -5,3 +5,7 @@
 main {
   min-height: 70vh;
 }
+
+.my-pagination-style a:hover {
+  background-color: #e10808;
+}
