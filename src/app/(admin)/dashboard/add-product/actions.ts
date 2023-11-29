@@ -13,14 +13,14 @@ export async function addProduct(
   formData: FormData,
 ): Promise<EditUpdateServerActionResponse> {
   let imageUrl = "";
-  const imageFile = formData.get("imageFile") as unknown as File;
+  const imageFile = formData.get("imageFile") as unknown as File | null;
   const imageLink = formData.get("imageLink")?.toString();
 
   let buffer: Buffer | null = null;
   let originalName: string | null = null;
 
   try {
-    if (imageFile.size) {
+    if (imageFile?.size) {
       const bytes = await imageFile.arrayBuffer();
       buffer = Buffer.from(bytes);
       originalName = imageFile.name;
