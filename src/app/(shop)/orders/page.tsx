@@ -4,7 +4,7 @@ import { GetOrdersByUserId } from "@/lib/db/order";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import OrderList from "./OrderList";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/authOptions";
 
 export const metadata = {
   metadataBase: new URL(env.BASE_URL),
