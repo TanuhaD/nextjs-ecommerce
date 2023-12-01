@@ -15,8 +15,8 @@ export default function OrderList({ order }: OrderListProps) {
         <div className="flex-auto  text-end font-bold">
           <p className="">Total: {order.total / 100} $</p>
           <p className="">
-            Created: {order.createdAt.getDate()}.{order.createdAt.getMonth()}.
-            {order.createdAt.getFullYear()}
+            Created: {order.createdAt.getDate()}.
+            {order.createdAt.getMonth() + 1}.{order.createdAt.getFullYear()}
           </p>
           <p>Status: {order.status}</p>
         </div>
