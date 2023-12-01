@@ -12,6 +12,7 @@ model Product {
   description String
   imageUrl    String
   name        String
+  category    String?     @default("misc")
   price       Int
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
