@@ -30,7 +30,7 @@ export default function PaginationBar({
   }
   return (
     <>
-      <div className="my-pagination-style join hidden  bg-gray-400  hover:bg-violet-600 focus:outline-none focus:ring focus:ring-violet-300 active:bg-violet-700 sm:block">
+      <div className="my-pagination-style join hidden  sm:block">
         {numberedPageItems}
       </div>
       <div className=" join block sm:hidden">
