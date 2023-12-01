@@ -1,29 +1,67 @@
 "use server";
 
-import { prisma } from "@/lib/db/prisma";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
-import { CartWithProducts } from "@/lib/db/cart";
-import { cookies } from "next/dist/client/components/headers";
-import { sendTelegramMessage } from "@/lib/sendTelegramMessage";
-import { env } from "@/lib/env";
 import { authOptions } from "@/app/api/auth/authOptions";
+import { CartWithProducts } from "@/lib/db/cart";
+import { prisma } from "@/lib/db/prisma";
+import { env } from "@/lib/env";
+import { sendTelegramMessage } from "@/lib/sendTelegramMessage";
+import { getServerSession } from "next-auth";
+import { revalidatePath } from "next/cache";
+import { cookies } from "next/dist/client/components/headers";
+import { redirect } from "next/navigation";
+import { ZodError, z } from "zod";
 
-export async function placeOrder(_: any, formData: FormData) {
+const schema = z.object({
+  name: z.string().min(3),
+  phone: z.string().min(3),
+  email: z.string().email(),
+  address: z.string().min(3),
+  comments: z.string().max(1000),
+});
+interface validationFields {
+  name?: string;
+  phone?: string;
+  email?: string;
+  address?: string;
+  comments?: string;
+}
+interface FormValues {
+  name: string;
+  phone: string;
+  email: string;
+  address: string;
+  comments: string;
+}
+
+export interface PlaceOrderResult {
+  result: "CREATED" | "FAIL" | null;
+  error: string | null;
+  validationErrors?: validationFields | null;
+}
+
+export async function placeOrder(
+  _: any,
+  formData: FormData,
+): Promise<PlaceOrderResult> {
   const session = await getServerSession(authOptions);
 
-  const name = formData.get("name")?.toString();
-  const address = formData.get("address")?.toString();
-  const phone = formData.get("phone")?.toString();
-  const email = formData.get("email")?.toString();
-  const comments = formData.get("comments")?.toString();
+  const formValues = Object.fromEntries(
+    formData.entries(),
+  ) as unknown as FormValues;
 
-  if (!name || !phone) {
+  try {
+    schema.parse(formValues);
+  } catch (e) {
+    const error = e as ZodError;
+    const validationErrors: validationFields = {};
+    error.errors.forEach((err) => {
+      const field = err.path.join(".") as keyof validationFields;
+      validationErrors[field] = err.message;
+    });
     return {
       result: "FAIL",
-      error: "Name and phone are required",
-      prismaResult: null,
+      validationErrors,
+      error: null,
     };
   }
 
@@ -56,11 +94,11 @@ export async function placeOrder(_: any, formData: FormData) {
       const newOrder = await tx.order.create({
         data: {
           status: "PENDING",
-          name,
-          address,
-          phone,
-          email,
-          comments,
+          name: formValues.name,
+          address: formValues.address,
+          phone: formValues.phone,
+          email: formValues.email,
+          comments: formValues.comments,
           total,
           userId: session?.user.id,
           items: {
@@ -94,14 +132,12 @@ export async function placeOrder(_: any, formData: FormData) {
     return {
       result: "CREATED",
       error: null,
-      prismaResult,
     };
   } catch (e) {
     const error = e as Error;
     return {
       result: "FAIL",
       error: `Database error: ${error.message}`,
-      prismaResult: null,
     };
   }
 }
