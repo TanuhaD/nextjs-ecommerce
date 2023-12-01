@@ -26,6 +26,7 @@ export const GetOrdersByUserId = async (
         userId: userId,
       },
       include: { items: { include: { product: true } } },
+      orderBy: { id: "desc" },
     });
     return { orders, error: null };
   } catch (e) {
