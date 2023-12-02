@@ -27,6 +27,7 @@ export const AddUpdateProductForm: React.FC<AddUpdateProductFormProps> = ({
   productInfo,
 }) => {
   const [state, formAction] = useFormState(action, initialState);
+  const [checked, setChecked] = useState(productInfo?.isFitchered || false);
   const { pending } = useFormStatus();
   const [linkValue, setLinkValue] = useState(productInfo?.imageUrl || "");
   const [fileValue, setFileValue] = useState<File | null>(null);
@@ -59,11 +60,7 @@ export const AddUpdateProductForm: React.FC<AddUpdateProductFormProps> = ({
         title: `Product ${result.toLowerCase()} successfully`,
         confirmButtonText: "OK",
       }).then(() => {
-        if (state.prismaResult?.id) {
-          router.push(`/dashboard/product/${state.prismaResult.id}}`);
-        } else {
-          router.push(`/dashboard`);
-        }
+        router.push(`/dashboard`);
       });
     } else if (result === "FAIL") {
       MySwal.fire({
@@ -75,6 +72,13 @@ export const AddUpdateProductForm: React.FC<AddUpdateProductFormProps> = ({
     }
   }, [productInfo?.id, router, state]);
 
+  // useEffect(() => {
+  // 	setChecked(productInfo?.isFitchered || false);
+  // }, [productInfo]);
+
+  const handleCheckboxChange = () => {
+    setChecked(!checked); // Toggle the value when the checkbox changes
+  };
   return (
     <form action={formAction}>
       {productInfo?.id && (
@@ -131,6 +135,18 @@ export const AddUpdateProductForm: React.FC<AddUpdateProductFormProps> = ({
         className="input input-bordered mb-3 w-full shadow-md "
         defaultValue={productInfo?.price}
       />
+      <div className="form-control m-auto flex items-end">
+        <label className="label cursor-pointer">
+          <span className="label-text mr-2">Fitchered</span>
+          <input
+            type="checkbox"
+            name="isFitchered"
+            checked={checked}
+            onChange={handleCheckboxChange}
+            className="checkbox-warning checkbox"
+          />
+        </label>
+      </div>
       <button
         className={`btn btn-primary btn-block shadow-md hover:shadow-xl`}
         type="submit"
