@@ -58,6 +58,7 @@ export async function addProduct(
   const name = formData.get("name")?.toString();
   const description = formData.get("description")?.toString();
   const price = Number(formData.get("price") || 0);
+  const isFitchered = Boolean(formData.get("isFitchered") || false);
   if (!name || !description || !price) {
     return {
       result: "FAIL",
@@ -74,6 +75,7 @@ export async function addProduct(
         description,
         imageUrl,
         price,
+        isFitchered,
       },
     });
     revalidatePath("/");
