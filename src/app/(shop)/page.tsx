@@ -5,30 +5,49 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface HomeProps {
-  searchParams: { page: string };
+  searchParams: { page: string; filter: string };
 }
 
 export default async function Home({
-  searchParams: { page = "1" },
+  searchParams: { page = "1", filter = "all" },
 }: HomeProps) {
   const currentPage = parseInt(page);
 
   const pageSize = 6;
   const heroItemCount = 1;
 
-  const totalItemCount = await prisma.product.count();
-
+  const totalItemCount = await prisma.product.count({
+    where: {
+      category: {
+        contains: filter === "all" ? "" : filter,
+      },
+    },
+  });
   const totalPages = Math.ceil((totalItemCount - heroItemCount) / pageSize);
-
   const products = await prisma.product.findMany({
+    where: {
+      category: {
+        contains: filter === "all" ? "" : filter,
+      },
+    },
     orderBy: { id: "desc" },
     skip:
       (currentPage - 1) * pageSize + (currentPage === 1 ? 0 : heroItemCount),
     take: pageSize + (currentPage === 1 ? heroItemCount : 0),
   });
+  console.log(products);
+  // const totalItemCount = products.length;
+  console.log(totalItemCount);
+
   const featuredProduct = products[0];
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center ">
+      <div className=" flex gap-4 rounded border-2 border-primary p-2 ">
+        <Link href={`?filter=all`}>All products</Link>
+        <Link href={`?filter=misc`}>Misc</Link>
+        <Link href={`?filter=shoes`}>Shoes</Link>
+        <Link href={`?filter=cosmetics`}>Cosmetics</Link>
+      </div>
       {currentPage === 1 && (
         <div className="hero rounded-xl bg-base-200">
           <div className="hero-content flex-col lg:flex-row">
@@ -45,7 +64,7 @@ export default async function Home({
               <p className="py-6">{featuredProduct.description}</p>
               <Link
                 href={"/product/" + featuredProduct.id}
-                className="btn-primary btn"
+                className="btn btn-primary"
               >
                 Check it out
               </Link>
@@ -54,7 +73,7 @@ export default async function Home({
         </div>
       )}
 
-      <div className="my-4 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="xl:grid-cols-3 my-4 grid grid-cols-1 gap-4 md:grid-cols-2">
         {(currentPage === 1 ? products.slice(1) : products).map((product) => {
           return <ProductCard key={product.id} product={product} />;
         })}
