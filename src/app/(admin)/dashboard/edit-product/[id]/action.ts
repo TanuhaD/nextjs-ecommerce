@@ -87,6 +87,7 @@ export async function updateProduct(
   const description = formData.get("description")?.toString();
   const price = Number(formData.get("price") || 0);
   const productId = formData.get("productId")?.toString();
+  const isFitchered = Boolean(formData.get("isFitchered") || false);
   if (!name || !description || !price) {
     return {
       result: "FAIL",
@@ -104,6 +105,7 @@ export async function updateProduct(
         description,
         imageUrl,
         price,
+        isFitchered,
       },
     });
     revalidatePath("/");
