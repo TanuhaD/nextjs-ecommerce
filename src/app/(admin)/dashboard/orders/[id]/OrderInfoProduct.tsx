@@ -26,7 +26,7 @@ export default function OrderInfoProduct({
     });
   };
   return (
-    <li className="mb-3 rounded-md border-2 border-solid border-gray-300 p-3  ">
+    <li className="mb-3 rounded-md border-2 border-solid border-gray-300 p-3 shadow-md ">
       <div className="flex items-center gap-4 sm:flex-col sm:items-start md:flex-row  ">
         <div className="card-image">
           <Image
@@ -44,11 +44,11 @@ export default function OrderInfoProduct({
           <p className="font-medium sm:text-sm md:text-2xl">
             Price: {item.price / 100} $
           </p>
-          <p className="  font-medium sm:text-sm md:text-2xl">
+          <p className=" flex flex-row items-center font-medium sm:text-sm md:text-2xl">
             Quantity:
             <input
               type="number"
-              className="input-ghost  input ml-2   max-w-xs sm:text-sm md:text-2xl"
+              className="input  input-ghost ml-2   max-w-[100px] sm:text-sm md:text-2xl"
               onChange={handleQuantityChange}
               onBlur={(e) => {
                 if (e.target.value === "") setQuantity("0");
