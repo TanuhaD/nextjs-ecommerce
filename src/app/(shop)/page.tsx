@@ -42,11 +42,31 @@ export default async function Home({
   const featuredProduct = products[0];
   return (
     <div className="flex flex-col items-center ">
-      <div className=" flex gap-4 rounded border-2 border-primary p-2 ">
-        <Link href={`?filter=all`}>All products</Link>
-        <Link href={`?filter=misc`}>Misc</Link>
-        <Link href={`?filter=shoes`}>Shoes</Link>
-        <Link href={`?filter=cosmetics`}>Cosmetics</Link>
+      <div className="  flex gap-4 rounded border-2 border-primary  font-bold sm:p-2 md:p-4">
+        <Link
+          href={`?filter=all`}
+          className="hover:text-primary focus:text-primary"
+        >
+          All products
+        </Link>
+        <Link
+          href={`?filter=misc`}
+          className="hover:text-primary focus:text-primary"
+        >
+          Misc
+        </Link>
+        <Link
+          href={`?filter=shoes`}
+          className="hover:text-primary focus:text-primary"
+        >
+          Shoes
+        </Link>
+        <Link
+          href={`?filter=cosmetics`}
+          className="hover:text-primary focus:text-primary"
+        >
+          Cosmetics
+        </Link>
       </div>
       {currentPage === 1 && (
         <div className="hero rounded-xl bg-base-200">
