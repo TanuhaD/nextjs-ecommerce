@@ -6,6 +6,6 @@ export type ProductType = {
   price: number;
   createdAt?: Date;
   updatedAt?: Date;
-  isFitchered?: boolean;
-  category?: string;
+  isFitchered?: boolean | null;
+  category?: string | null;
 };
