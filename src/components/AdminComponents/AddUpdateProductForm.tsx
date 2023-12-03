@@ -116,12 +116,12 @@ export const AddUpdateProductForm: React.FC<AddUpdateProductFormProps> = ({
         name="imageFile"
         onChange={handleFileChange}
         disabled={linkValue !== ""}
-        className="file-input file-input-bordered file-input-warning mb-3 mr-7 w-full max-w-xs"
+        className="file-input file-input-bordered file-input-warning mb-3 w-full max-w-xs sm:mr-0 md:mr-7"
         type="file"
         accept="image/*"
       />
       <button
-        className="btn btn-primary shadow-md hover:shadow-xl"
+        className="btn btn-primary shadow-md hover:shadow-xl sm:mb-3 md:mb-0"
         type="button"
         onClick={clearImageInputs}
       >
@@ -135,9 +135,19 @@ export const AddUpdateProductForm: React.FC<AddUpdateProductFormProps> = ({
         className="input input-bordered mb-3 w-full shadow-md "
         defaultValue={productInfo?.price}
       />
-      <div className="form-control m-auto flex items-end">
+
+      <div className="sm:col form-control m-4 items-center md:flex-row ">
+        <p className="mr-3 font-bold sm:mb-2">Category</p>
+        <select className="select select-warning w-full max-w-xs">
+          <option>{productInfo?.category}</option>
+          <option>Shoed</option>
+          <option>Cosmetics</option>
+          <option>Clothes</option>
+          <option>Plant</option>
+          <option>Technique</option>
+        </select>
         <label className="label cursor-pointer">
-          <span className="label-text mr-2">Fitchered</span>
+          <span className="label-text mr-2 font-bold">Fitchered</span>
           <input
             type="checkbox"
             name="isFitchered"
