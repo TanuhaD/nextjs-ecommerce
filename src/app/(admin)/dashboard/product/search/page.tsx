@@ -1,3 +1,4 @@
+import AdminProductCard from "@/components/AdminComponents/AdminProductCard";
 import ProductCard from "@/components/ProductCard";
 import { prisma } from "@/lib/db/prisma";
 import { env } from "@/lib/env";
@@ -43,7 +44,7 @@ export default async function SearchPage({
   return (
     <div className="xl:grid-cols-3 my-4 grid grid-cols-1 gap-4 md:grid-cols-2">
       {products.map((product) => {
-        return <ProductCard key={product.id} product={product} />;
+        return <AdminProductCard key={product.id} product={product} />;
       })}
     </div>
   );
