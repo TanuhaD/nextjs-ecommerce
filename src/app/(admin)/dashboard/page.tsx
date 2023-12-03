@@ -1,6 +1,6 @@
 import AdminProductCard from "@/components/AdminComponents/AdminProductCard";
 import PaginationBar from "@/components/PaginationBar/PaginationBar";
-import ProductCard from "@/components/ProductCard";
+
 import { prisma } from "@/lib/db/prisma";
 
 interface DashboardProps {
@@ -13,11 +13,11 @@ const DashboardPage = async ({
   const currentPage = parseInt(page);
 
   const pageSize = 6;
-  const heroItemCount = 1;
+  const heroItemCount = 0;
 
   const totalItemCount = await prisma.product.count();
 
-  const totalPages = Math.ceil((totalItemCount - heroItemCount) / pageSize);
+  const totalPages = Math.ceil(totalItemCount / pageSize);
 
   const products = await prisma.product.findMany({
     orderBy: { id: "desc" },
