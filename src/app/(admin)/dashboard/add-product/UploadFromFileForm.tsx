@@ -76,9 +76,9 @@ export default function UploadFromFileForm() {
     }
   };
   return (
-    <div className="m-3 flex justify-center  gap-3">
+    <div className="m-3 flex gap-3 sm:flex-col md:flex-row md:justify-center">
       <input
-        className="file-input file-input-bordered file-input-warning w-full max-w-xs"
+        className="mw:[300px] file-input file-input-bordered file-input-warning w-full max-w-xs"
         name="file"
         type="file"
         accept=".json"
