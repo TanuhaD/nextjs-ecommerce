@@ -20,18 +20,15 @@ const AllOrdersAdminPage = async ({
   const currentPage = parseInt(page);
 
   const pageSize = 6;
-  const heroItemCount = 1;
 
-  const totalItemCount = await prisma.product.count();
+  const totalItemCount = await prisma.order.count();
 
-  const totalPages = Math.ceil((totalItemCount - heroItemCount) / pageSize);
+  const totalPages = Math.ceil(totalItemCount / pageSize);
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
 
-  const products = await prisma.product.findMany({
-    orderBy: { id: "desc" },
-    skip:
-      (currentPage - 1) * pageSize + (currentPage === 1 ? 0 : heroItemCount),
-    take: pageSize + (currentPage === 1 ? heroItemCount : 0),
-  });
+  const paginatedOrders = orders?.slice(startIndex, endIndex);
+
   return (
     <>
       {error && <div>Something went wrong... Try again later.</div>}
