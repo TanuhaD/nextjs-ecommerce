@@ -27,11 +27,10 @@ export default async function OrderPage({
   const currentPage = parseInt(page);
 
   const pageSize = 6;
-  const heroItemCount = 1;
 
-  const totalItemCount = orders?.length || 0;
+  const totalItemCount = await prisma.order.count();
 
-  const totalPages = Math.ceil((totalItemCount - heroItemCount) / pageSize);
+  const totalPages = Math.ceil(totalItemCount / pageSize);
 
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = startIndex + pageSize;
@@ -40,7 +39,7 @@ export default async function OrderPage({
 
   return (
     <>
-      <h2 className="mb-6 rounded-md border p-2 pt-3 text-center  font-bold text-info shadow-md sm:text-xl md:text-3xl">
+      <h2 className="mb-6 rounded-md border bg-zinc-100 p-2 pt-3 text-center  font-bold text-info shadow-md sm:text-xl md:text-3xl">
         Your orders {session.user.name}
       </h2>
 
