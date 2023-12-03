@@ -13,13 +13,19 @@ export default function AdminNavBarMobMenu() {
         className="menu dropdown-content z-[1] mt-[54px] w-52 items-center rounded-box bg-base-100 p-2 font-bold shadow-lg  "
       >
         <li className="mx-4 my-6 md:my-0" onClick={closeDropdowns}>
-          <Link href={"/dashboard/orders"}>All orders</Link>
+          <Link href={"/dashboard/orders"} className="hover:bg-primary">
+            All orders
+          </Link>
         </li>
         <li className="mx-4 my-6 md:my-0" onClick={closeDropdowns}>
-          <Link href={"/dashboard/add-product"}>Add Product</Link>
+          <Link href={"/dashboard/add-product"} className="hover:bg-primary">
+            Add Product
+          </Link>
         </li>
         <li className="mx-4 my-6 md:my-0" onClick={closeDropdowns}>
-          <Link href={"/dashboard"}>All Products</Link>
+          <Link href={"/dashboard"} className="hover:bg-primary">
+            All Products
+          </Link>
         </li>
       </ul>
     </div>
