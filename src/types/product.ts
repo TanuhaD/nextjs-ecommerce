@@ -7,4 +7,5 @@ export type ProductType = {
   createdAt?: Date;
   updatedAt?: Date;
   isFitchered?: boolean | null;
+  category?: string;
 };
