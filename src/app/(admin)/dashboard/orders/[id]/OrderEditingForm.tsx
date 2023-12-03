@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import OrderInfoProduct from "./OrderInfoProduct";
 import { MySwal } from "@/lib/sweet-alert";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface OrderEditingFormProps {
   orderResult: GetOrderByIdResult;
@@ -85,7 +86,7 @@ export default function OrderEditingForm({
         Order {order.id}
       </h1>
       <div className="mb-4 gap-6  rounded-md border p-4  shadow-md">
-        <p className=" border-b-2 border-gray-200 p-4 font-medium text-info sm:text-sm md:text-2xl lg:text-lg">
+        <p className=" border-b-2 border-gray-200 p-4 font-medium text-info sm:text-sm md:text-2xl ">
           Name:{" "}
           <input
             type="text"
@@ -141,6 +142,14 @@ export default function OrderEditingForm({
           );
         })}
       </ul>
+      <div className="flex items-center gap-4 rounded-md border border-warning p-6 shadow-md sm:flex-col md:mb-4 md:mt-4 md:flex-row">
+        <p className=" font-bold sm:text-sm md:text-2xl">
+          Add a new product to the order
+        </p>
+        <Link href="#" className="btn btn-primary p-4 font-bold shadow-md">
+          Add
+        </Link>
+      </div>
       <div className="flex flex-col  justify-center gap-4 p-4 font-semibold">
         <p className="font-bold sm:text-sm md:text-2xl">
           Total: {total / 100} $
@@ -152,7 +161,7 @@ export default function OrderEditingForm({
         <p className="font-bold sm:text-sm md:text-2xl">
           Status:
           <select
-            className="select select-ghost mb-3 ml-3 mt-3 w-full max-w-xs sm:text-sm md:text-2xl"
+            className="select select-ghost mb-3 ml-3 mt-3 w-full max-w-xs rounded-md border  border-warning sm:text-sm md:text-2xl"
             defaultValue={status}
             onChange={(e) => setStatus(e.target.value)}
           >
@@ -168,7 +177,10 @@ export default function OrderEditingForm({
         </p>
       </div>
       <div className="flex justify-end">
-        <button onClick={handleOrderChange} className="btn btn-primary ">
+        <button
+          onClick={handleOrderChange}
+          className="btn btn-primary shadow-md "
+        >
           Save order
         </button>
       </div>
