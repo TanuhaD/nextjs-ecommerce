@@ -14,7 +14,7 @@ export default function OrderAdminInfoProduct({ item }: OrderInfoProductProps) {
     <>
       <li
         key={item.product.id}
-        className="mb-3 flex items-center gap-4 rounded-md border-2 border-solid border-gray-300  p-3 "
+        className="mb-3 flex gap-4 rounded-md border-2 border-solid border-gray-300 p-3 sm:flex-col md:flex-row  md:items-center "
       >
         <div className="card-image">
           <Image
@@ -32,7 +32,7 @@ export default function OrderAdminInfoProduct({ item }: OrderInfoProductProps) {
           <p className="font-medium sm:text-sm md:text-2xl">
             Price: {item.price / 100} $
           </p>
-          <p className="font-medium sm:text-sm md:text-2xl">
+          <p className=" font-medium sm:text-sm md:text-2xl">
             Quantity: {item.quantity}
           </p>
         </div>
