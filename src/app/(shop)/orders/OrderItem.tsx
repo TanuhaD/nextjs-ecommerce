@@ -22,7 +22,9 @@ export default function OrderItem({ item }: OrderItemProps) {
           />
         </div>
         <div className="gap-4">
-          <p className="font-medium text-info">{item.product.name}</p>
+          <p className="break-words font-medium text-info">
+            {item.product.name}
+          </p>
           <p className="font-medium">Price: {item.price / 100} $</p>
           <p className="font-medium">Quantity: {item.quantity}</p>
         </div>
