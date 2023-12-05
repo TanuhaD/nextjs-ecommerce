@@ -26,7 +26,7 @@ export default function OrderAdminInfoProduct({ item }: OrderInfoProductProps) {
           />
         </div>
         <div className="gap-4">
-          <p className="font-medium text-info sm:text-sm md:text-2xl">
+          <p className="break-words font-medium text-info sm:text-sm md:text-2xl">
             {item.product.name}
           </p>
           <p className="font-medium sm:text-sm md:text-2xl">
