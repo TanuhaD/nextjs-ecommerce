@@ -13,7 +13,7 @@ interface SliderProductsProps {
 export default function SliderProducts({
   featuredProductS,
 }: SliderProductsProps) {
-  const [showSlider, setShowSlider] = useState(false);
+  // const [showSlider, setShowSlider] = useState(false);
   useEffect(() => {
     const glide = new Glide(".glide", {
       type: "carousel",
@@ -21,7 +21,8 @@ export default function SliderProducts({
       perView: 3,
       gap: 10,
       autoplay: 3000,
-      // peek: { before: 50, after: 50 },
+      focusAt: "center",
+
       breakpoints: {
         2000: {
           perView: 5,
@@ -29,73 +30,89 @@ export default function SliderProducts({
         1024: {
           perView: 4,
         },
-        500: {
-          perView: 3,
+        900: {
+          perView: 4,
+        },
+        800: {
+          perView: 4,
+        },
+        760: {
+          perView: 2,
+        },
+        748: {
+          perView: 2,
+        },
+        730: {
+          perView: 2,
+        },
+        700: {
+          perView: 2,
+        },
+        600: {
+          perView: 2,
+        },
+        320: {
+          perView: 2,
         },
       },
     });
-    glide.on("mount.after", function () {
-      setShowSlider(true);
-    });
+    // glide.on("mount.after", function () {
+    //   setShowSlider(true);
+    // });
+
     glide.mount();
+
     return () => {
       glide.destroy();
     };
-  }, []);
+  }, [featuredProductS]);
 
   return (
-    <div>
-      <div
-        className={`relative p-4 sm:h-[180px] sm:w-[300px] md:h-[300px]  md:w-[700px]  lg:w-[1000px] opacity-${
-          showSlider ? "100" : "0"
-        }`}
-      >
-        <div className="glide">
-          <div
-            className="glide__arrows absolute z-10 flex w-full justify-between sm:top-14 md:top-20 lg:top-24 "
-            data-glide-el="controls"
+    <div
+      className={`relative p-4 opacity-100 sm:mb-2 sm:w-[280px] md:mb-4 md:w-[700px] lg:w-[1000px] `}
+    >
+      <div className="glide w-full ">
+        <div
+          className="glide__arrows absolute z-10 flex w-full justify-between sm:top-8 md:top-10  "
+          data-glide-el="controls"
+        >
+          <button
+            className="glide__arrow glide__arrow--left "
+            data-glide-dir="<"
           >
-            <button
-              className="glide__arrow glide__arrow--left"
-              data-glide-dir="<"
-            >
-              &#5130;
-            </button>
-            <button
-              className="glide__arrow glide__arrow--right"
-              data-glide-dir=">"
-            >
-              &#5125;
-            </button>
-          </div>
-          <div className="glide__track" data-glide-el="track">
-            <ul className="glide__slides">
-              {featuredProductS?.map((product) => (
-                <li key={product.id} className="  ">
-                  <Link
-                    href={"/product/" + product.id}
-                    className="glide__slide "
-                  >
+            &#5130;
+          </button>
+          <button
+            className="glide__arrow glide__arrow--right"
+            data-glide-dir=">"
+          >
+            &#5125;
+          </button>
+        </div>
+        <div className="glide__track " data-glide-el="track">
+          <ul className="glide__slides p-2 lg:gap-2 ">
+            {featuredProductS?.map((product) => (
+              <li key={product.id} className=" shadow-2xl">
+                <Link
+                  href={"/product/" + product.id}
+                  className="glide__slide block "
+                >
+                  <div className="relative rounded-lg border sm:h-[100px] sm:w-[120px] md:h-[150px] md:w-[150px] lg:h-[170px] lg:w-[190px]">
                     <Image
                       src={product.imageUrl}
                       alt={product.name}
-                      width={100}
-                      height={100}
+                      fill
+                      className="rounded-lg border  transition  duration-500 ease-in-out  hover:scale-105 "
                       style={{
-                        objectFit: "cover",
-                        width: "100%",
-                        height: "100%",
-                        backgroundPosition: "top right, center",
+                        objectFit: "contain",
                         display: "block",
-                        // cover, contain, none
                       }}
-                      className=" rounded-lg shadow-2xl  transition  duration-500  ease-in-out hover:scale-105  "
                     />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>
