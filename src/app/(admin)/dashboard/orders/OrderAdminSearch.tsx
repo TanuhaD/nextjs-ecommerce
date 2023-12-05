@@ -5,7 +5,7 @@ async function searchOrders(formData: FormData) {
 
   const searchQuery = formData.get("searchQuery")?.toString();
   if (searchQuery) {
-    redirect("/orders/admin/search?query=" + searchQuery);
+    redirect("/dashboard/orders/search?query=" + searchQuery);
   }
 }
 
