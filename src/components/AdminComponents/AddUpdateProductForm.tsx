@@ -27,7 +27,7 @@ export const AddUpdateProductForm: React.FC<AddUpdateProductFormProps> = ({
   productInfo,
 }) => {
   const [state, formAction] = useFormState(action, initialState);
-  const [checked, setChecked] = useState(productInfo?.isFitchered || false);
+  const [checked, setChecked] = useState(productInfo?.isFeatured || false);
   const { pending } = useFormStatus();
   const [linkValue, setLinkValue] = useState(productInfo?.imageUrl || "");
   const [fileValue, setFileValue] = useState<File | null>(null);
@@ -71,10 +71,6 @@ export const AddUpdateProductForm: React.FC<AddUpdateProductFormProps> = ({
       });
     }
   }, [productInfo?.id, router, state]);
-
-  // useEffect(() => {
-  // 	setChecked(productInfo?.isFitchered || false);
-  // }, [productInfo]);
 
   const handleCheckboxChange = () => {
     setChecked(!checked); // Toggle the value when the checkbox changes
@@ -147,10 +143,10 @@ export const AddUpdateProductForm: React.FC<AddUpdateProductFormProps> = ({
           <option>Technique</option>
         </select>
         <label className="label cursor-pointer">
-          <span className="label-text mr-2 font-bold">Fitchered</span>
+          <span className="label-text mr-2 font-bold">Featured</span>
           <input
             type="checkbox"
-            name="isFitchered"
+            name="isFeatured"
             checked={checked}
             onChange={handleCheckboxChange}
             className="checkbox-warning checkbox"
