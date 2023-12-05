@@ -36,9 +36,6 @@ export default async function Home({
       (currentPage - 1) * pageSize + (currentPage === 1 ? 0 : heroItemCount),
     take: pageSize + (currentPage === 1 ? heroItemCount : 0),
   });
-  console.log(products);
-  // const totalItemCount = products.length;
-  console.log(totalItemCount);
 
   const featuredProduct = products[0];
   const featuredProductS = await prisma.product.findMany({
@@ -49,7 +46,7 @@ export default async function Home({
 
   return (
     <div className="flex flex-col items-center ">
-      <div className="  flex gap-4 rounded border-2 border-primary  font-bold sm:p-2 md:p-4">
+      <div className="  mb-2 flex gap-4 rounded border-2 border-primary font-bold sm:p-2 md:p-4">
         <Link
           href={`?filter=all`}
           className="hover:text-primary focus:text-primary"
@@ -76,13 +73,13 @@ export default async function Home({
         </Link>
       </div>
       {currentPage === 1 && (
-        <div className="hero rounded-xl bg-base-200">
+        <div className="hero mb-3 rounded-xl bg-base-200">
           <div className="hero-content flex-col lg:flex-row">
             <Image
               src={products[0].imageUrl || "/no-image-placeholder.png"}
               alt={products[0].name}
-              width={800}
-              height={400}
+              width={400}
+              height={200}
               className="w-full max-w-sm rounded-lg shadow-2xl"
               priority
             />
@@ -104,7 +101,6 @@ export default async function Home({
         {(currentPage === 1 ? products.slice(1) : products).map((product) => {
           return <ProductCard key={product.id} product={product} />;
         })}
-        SliderProducts
       </div>
       {totalPages > 1 && (
         <PaginationBar currentPage={currentPage} totalPages={totalPages} />
