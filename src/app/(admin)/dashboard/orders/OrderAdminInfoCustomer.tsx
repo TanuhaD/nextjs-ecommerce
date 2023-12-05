@@ -11,15 +11,15 @@ export default function OrderAdminInfoCustomer({
       <h2 className=" text-bold medium mb-4 text-center sm:text-xl md:text-3xl">
         Customer Information
       </h2>
-      <p className=" border-b-2 border-gray-200 p-4 font-medium text-info sm:text-sm md:text-2xl">
+      <p className=" break-words border-b-2 border-gray-200 p-4 font-medium text-info sm:text-sm md:text-2xl">
         {" "}
         Name:{order.name}
       </p>
-      <p className="border-b-2 border-gray-200 p-4 font-medium text-info sm:text-sm md:text-2xl">
+      <p className="break-words border-b-2 border-gray-200 p-4 font-medium text-info sm:text-sm md:text-2xl">
         {" "}
         Phone: {order.phone}
       </p>
-      <p className="border-b-2 border-gray-200 p-4 font-medium text-info sm:text-sm md:text-2xl">
+      <p className="break-words border-b-2 border-gray-200 p-4 font-medium text-info sm:text-sm md:text-2xl">
         {" "}
         Adress: {order.address}
       </p>
