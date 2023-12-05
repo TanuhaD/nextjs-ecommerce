@@ -1,5 +1,6 @@
 import PaginationBar from "@/components/PaginationBar/PaginationBar";
 import ProductCard from "@/components/ProductCard";
+import SliderProducts from "@/components/SliderProducts/SliderProducts";
 import { prisma } from "@/lib/db/prisma";
 import Image from "next/image";
 import Link from "next/link";
@@ -40,6 +41,12 @@ export default async function Home({
   console.log(totalItemCount);
 
   const featuredProduct = products[0];
+  const featuredProductS = await prisma.product.findMany({
+    where: {
+      isFeatured: true,
+    },
+  });
+
   return (
     <div className="flex flex-col items-center ">
       <div className="  flex gap-4 rounded border-2 border-primary  font-bold sm:p-2 md:p-4">
@@ -79,9 +86,9 @@ export default async function Home({
               className="w-full max-w-sm rounded-lg shadow-2xl"
               priority
             />
-            <div>
+            <div className="sm:max-w-[270px]">
               <h1 className="text-5xl font-bold">{featuredProduct.name}</h1>
-              <p className="py-6">{featuredProduct.description}</p>
+              <p className="break-words  py-6">{featuredProduct.description}</p>
               <Link
                 href={"/product/" + featuredProduct.id}
                 className="btn btn-primary"
@@ -92,11 +99,12 @@ export default async function Home({
           </div>
         </div>
       )}
-
+      <SliderProducts featuredProductS={featuredProductS} />
       <div className="xl:grid-cols-3 my-4 grid grid-cols-1 gap-4 md:grid-cols-2">
         {(currentPage === 1 ? products.slice(1) : products).map((product) => {
           return <ProductCard key={product.id} product={product} />;
         })}
+        SliderProducts
       </div>
       {totalPages > 1 && (
         <PaginationBar currentPage={currentPage} totalPages={totalPages} />
