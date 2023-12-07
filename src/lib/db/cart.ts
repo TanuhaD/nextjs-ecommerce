@@ -4,6 +4,7 @@ import { prisma } from "./prisma";
 import { cache } from "react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/authOptions";
+import { revalidatePath } from "next/cache";
 
 export type CartWithProducts = Prisma.CartGetPayload<{
   include: { items: { include: { product: true } } };
@@ -124,7 +125,7 @@ export async function mergeAnonymousCartIntoUserCart(userId: string) {
     await tx.cart.delete({ where: { id: localCart.id } });
     cookies().set("localCartId", "");
   });
-
+  revalidatePath("/", "layout");
   function mergeCartItems(...cartItems: CartItem[][]) {
     return cartItems.reduce((acc, cart) => {
       cart.forEach((item) => {
@@ -138,4 +139,5 @@ export async function mergeAnonymousCartIntoUserCart(userId: string) {
       return acc;
     }, [] as CartItem[]);
   }
+  revalidatePath("/", "layout");
 }
