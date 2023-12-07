@@ -26,17 +26,28 @@ export default async function CartPage() {
         );
       })}
       {!cart?.items.length && <p>Your cart is empty</p>}
-      <div className="flex flex-col items-end sm:items-center">
+      <div className="flex flex-col gap-3 sm:items-center md:items-end">
         <p className="mb-3 font-bold">
           Total: {formatPrice(cart?.subTotal || 0)}
         </p>
-        <Link
-          href="/placing-an-order"
-          className="btn-primary btn  shadow-md hover:shadow-2xl sm:w-[200px]"
-        >
-          Placing an order
-        </Link>
       </div>
+
+      {cart?.items.length !== 0 && (
+        <div className="flex flex-col gap-3 sm:items-center md:items-end">
+          <Link
+            href="/"
+            className="btn btn-primary  shadow-md hover:shadow-2xl sm:w-[200px]"
+          >
+            Continue shopping
+          </Link>
+          <Link
+            href="/placing-an-order"
+            className="btn btn-primary  shadow-md hover:shadow-2xl sm:w-[200px]"
+          >
+            Placing an order
+          </Link>
+        </div>
+      )}
     </>
   );
 }
