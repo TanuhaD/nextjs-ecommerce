@@ -35,8 +35,8 @@ export const authOptions: NextAuthOptions = {
     },
   },
   events: {
-    signIn({ user }) {
-      mergeAnonymousCartIntoUserCart(user.id);
+    async signIn({ user }) {
+      await mergeAnonymousCartIntoUserCart(user.id);
     },
   },
 };
