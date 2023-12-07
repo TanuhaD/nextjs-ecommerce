@@ -20,7 +20,6 @@ async function searchProducts(formData: FormData) {
 export default async function Navbar() {
   const session = await getServerSession(authOptions);
   const cart = await GetCart();
-
   return (
     <div id="navbar" className="bg-base-100">
       <div className="navbar m-auto max-w-7xl flex-col gap-2 md:flex-row">
