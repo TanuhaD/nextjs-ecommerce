@@ -29,7 +29,7 @@ export default function AdminProductCard({ product }: AdminProductCardProps) {
           {product.name}
           {isNew && <div className="badge badge-secondary">NEW</div>}
         </h2>
-        <p>{product.description}</p>
+        <p className="break-words font-medium  ">{product.description}</p>
         <PriceTag price={product.price} />
       </div>
     </Link>
