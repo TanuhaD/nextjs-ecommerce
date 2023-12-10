@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import "@/styles/globals.css";
 import AdminNavBar from "@/components/AdminComponents/AdminNavBar/AdminNavBar";
 import { authOptions } from "../api/auth/authOptions";
+import AdminOrderContextProvider from "./dashboard/orders/AdminOrderContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
