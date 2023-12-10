@@ -146,7 +146,10 @@ export default function OrderEditingForm({
         <p className=" font-bold sm:text-sm md:text-2xl">
           Add a new product to the order
         </p>
-        <Link href="#" className="btn btn-primary p-4 font-bold shadow-md">
+        <Link
+          href="/dashboard"
+          className="btn btn-primary p-4 font-bold shadow-md"
+        >
           Add
         </Link>
       </div>
