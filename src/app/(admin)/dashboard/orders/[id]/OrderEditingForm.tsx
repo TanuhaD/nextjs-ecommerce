@@ -1,11 +1,12 @@
 "use client";
 
 import { GetOrderByIdResult } from "@/lib/db/order";
-import { useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import OrderInfoProduct from "./OrderInfoProduct";
 import { MySwal } from "@/lib/sweet-alert";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { AdminOrderContext } from "../AdminOrderContext";
 
 interface OrderEditingFormProps {
   orderResult: GetOrderByIdResult;
@@ -22,6 +23,8 @@ export default function OrderEditingForm({
   const [total, setTotal] = useState(order?.total || 0);
   const [status, setStatus] = useState(order?.status || "");
   const router = useRouter();
+  const { orderId, setOrderId } = useContext(AdminOrderContext) || {};
+
   useEffect(() => {
     setTotal(
       orderItems.reduce((acc, item) => {
@@ -79,11 +82,17 @@ export default function OrderEditingForm({
   if (!order) {
     return <div>Order not found</div>;
   }
+  const handleAddProduct = () => {
+    if (setOrderId) {
+      console.log("Setting orderId:", order.id);
+      setOrderId(order.id);
+    }
+  };
 
   return (
     <div className=" mb-6  rounded-md border-2 border-solid  border-primary bg-slate-50 p-4 shadow-md ">
       <h1 className=" mb-6 rounded-md border p-2 pt-3  text-center font-bold text-info  shadow-md sm:text-xs md:text-3xl">
-        Order {order.id}
+        Order {order.id || orderId}
       </h1>
       <div className="mb-4 gap-6  rounded-md border p-4  shadow-md">
         <p className=" border-b-2 border-gray-200 p-4 font-medium text-info sm:text-sm md:text-2xl ">
@@ -149,6 +158,7 @@ export default function OrderEditingForm({
         <Link
           href="/dashboard"
           className="btn btn-primary p-4 font-bold shadow-md"
+          onClick={handleAddProduct}
         >
           Add
         </Link>
