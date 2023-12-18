@@ -7,6 +7,7 @@ import { notFound } from "next/navigation";
 import DeleteProductButton from "./DeleteProductButton";
 import EditProductButton from "./EditProductButton";
 import { env } from "@/lib/env";
+import AddProductInOrderButton from "./AddProductInOrderButton";
 
 interface ProductPageProps {
   params: {
@@ -62,7 +63,7 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params: { id } }) => {
         className="rounded-lg"
         priority
       ></Image>
-      <div>
+      <div className="flex  sm:flex-col">
         <h1 className="text-5xl font-bold">{product.name}</h1>
         <PriceTag price={product.price} className="mt-4" />
         <p className="py-6">{product.description}</p>
@@ -70,6 +71,9 @@ const ProductPage: React.FC<ProductPageProps> = async ({ params: { id } }) => {
         <EditProductButton productId={product.id} />
 
         <DeleteProductButton productId={product.id} />
+        <div className="mt-3 flex items-center gap-2">
+          <AddProductInOrderButton productId={product.id} />
+        </div>
       </div>
     </div>
   );
