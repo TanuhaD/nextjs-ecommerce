@@ -27,8 +27,12 @@ const RootAdminDashboardLayout = async ({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AdminNavBar />
-        <main className=" m-auto min-w-[300px] max-w-7xl p-4">{children}</main>
+        <AdminOrderContextProvider>
+          <AdminNavBar />
+          <main className=" m-auto min-w-[300px] max-w-7xl p-4">
+            {children}
+          </main>
+        </AdminOrderContextProvider>
       </body>
     </html>
   );
