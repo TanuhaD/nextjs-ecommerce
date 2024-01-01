@@ -3,8 +3,10 @@
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
 import { useContext } from "react";
-import { AdminOrderContext } from "../../orders/AdminOrderContext";
+
 import { useRouter } from "next/navigation";
+import { useAdminOrderContext } from "../../orders/AdminOrderContext";
+
 interface AddProductInOrderButtonProps {
   productId: string;
 }
@@ -14,8 +16,8 @@ const MySwal = withReactContent(Swal);
 export default function AddProductInOrderButton({
   productId,
 }: AddProductInOrderButtonProps) {
-  const { orderId, setOrderId } = useContext(AdminOrderContext) || {};
-  console.log("orderId", orderId);
+  const { orderId } = useAdminOrderContext();
+  console.log("orderId==>", orderId);
   const router = useRouter();
   const handleAddProductInOrder = async () => {
     try {
@@ -47,7 +49,7 @@ export default function AddProductInOrderButton({
         });
       }
 
-      setOrderId && setOrderId(updatedOrderData.order.id);
+      // mySetOrderId && mySetOrderId(updatedOrderData.order.id);
 
       MySwal.fire({
         icon: "success",
