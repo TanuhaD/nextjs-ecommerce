@@ -80,7 +80,7 @@ export default async function Home({
               alt={products[0].name}
               width={400}
               height={200}
-              className="w-full max-w-sm rounded-lg shadow-2xl"
+              className=" w-full max-w-sm rounded-lg shadow-2xl"
               priority
             />
             <div className="sm:max-w-[270px]">
