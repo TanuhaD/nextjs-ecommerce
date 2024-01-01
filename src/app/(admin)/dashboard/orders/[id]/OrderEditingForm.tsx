@@ -6,7 +6,7 @@ import OrderInfoProduct from "./OrderInfoProduct";
 import { MySwal } from "@/lib/sweet-alert";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { AdminOrderContext } from "../AdminOrderContext";
+import { useAdminOrderContext } from "../AdminOrderContext";
 
 interface OrderEditingFormProps {
   orderResult: GetOrderByIdResult;
@@ -23,7 +23,7 @@ export default function OrderEditingForm({
   const [total, setTotal] = useState(order?.total || 0);
   const [status, setStatus] = useState(order?.status || "");
   const router = useRouter();
-  const { orderId, setOrderId } = useContext(AdminOrderContext) || {};
+  const { orderId, mySetOrderId } = useAdminOrderContext();
 
   useEffect(() => {
     setTotal(
@@ -82,10 +82,11 @@ export default function OrderEditingForm({
   if (!order) {
     return <div>Order not found</div>;
   }
+
   const handleAddProduct = () => {
-    if (setOrderId) {
+    if (mySetOrderId) {
       console.log("Setting orderId:", order.id);
-      setOrderId(order.id);
+      mySetOrderId(order.id);
     }
   };
 
@@ -155,13 +156,12 @@ export default function OrderEditingForm({
         <p className=" font-bold sm:text-sm md:text-2xl">
           Add a new product to the order
         </p>
-        <Link
-          href="/dashboard"
+        <button
           className="btn btn-primary p-4 font-bold shadow-md"
           onClick={handleAddProduct}
         >
           Add
-        </Link>
+        </button>
       </div>
       <div className="flex flex-col  justify-center gap-4 p-4 font-semibold">
         <p className="font-bold sm:text-sm md:text-2xl">
