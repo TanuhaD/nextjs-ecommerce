@@ -1,47 +1,53 @@
 "use client";
 
-import { createContext, use, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 interface AdminOrderContextValue {
   orderId: string | null;
-  setOrderId: React.Dispatch<React.SetStateAction<string | null>>;
+  mySetOrderId: Function;
+  // mySetOrderId: React.Dispatch<React.SetStateAction<string | null>>;
 }
+const initialContextValue: AdminOrderContextValue = {
+  orderId: null,
+  mySetOrderId: (newOrderId: string) => {},
+};
 interface AdminOrderContextProviderProps {
   children: React.ReactNode;
 }
-export const AdminOrderContext = createContext<AdminOrderContextValue | null>(
-  null,
-);
+export const AdminOrderContext =
+  createContext<AdminOrderContextValue>(initialContextValue);
 
 export default function AdminOrderContextProvider({
   children,
 }: AdminOrderContextProviderProps) {
   const [orderId, setOrderId] = useState<string | null>(null);
-  const [orderContextValue, setOrderContextValue] =
-    useState<AdminOrderContextValue | null>(null);
-
+  console.log("component rerender; orderId", orderId);
+  const mySetOrderId = (newOrderId: string) => {
+    console.log("newOrderId", newOrderId);
+    setOrderId(newOrderId);
+  };
   useEffect(() => {
-    setOrderContextValue({
-      orderId,
-      setOrderId: (newOrderId) => {
-        // Дополнительные проверки или логика установки orderId
-        console.log("newOrderId", newOrderId);
-        setOrderId(newOrderId);
-      },
-    });
-  }, [orderId]);
-  // const contextValue: AdminOrderContextValue = {
-  //   orderId,
+    console.log("setup function");
 
-  //   setOrderId: (newOrderId) => {
-  //     // Дополнительные проверки или логика установки orderId
-  //     console.log("newOrderId", newOrderId);
-  //     setOrderId(newOrderId);
-  //   },
-  // };
+    return () => {
+      console.log("cleanup function");
+    };
+  }, []);
   return (
-    <AdminOrderContext.Provider value={orderContextValue}>
+    <AdminOrderContext.Provider value={{ orderId, mySetOrderId }}>
+      <div>Admin order context</div>
+      <div>{orderId || "no order id"}</div>
       {children}
     </AdminOrderContext.Provider>
   );
 }
+
+export const useAdminOrderContext = () => {
+  const context = useContext(AdminOrderContext);
+  if (!context) {
+    throw new Error(
+      "useAdminOrderContext must be used within an AdminOrderContextProvider",
+    );
+  }
+  return context;
+};
