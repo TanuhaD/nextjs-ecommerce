@@ -102,6 +102,7 @@ export default function SliderProducts({
                       src={product.imageUrl}
                       alt={product.name}
                       fill
+                      sizes="100%"
                       className="rounded-lg border  transition  duration-500 ease-in-out  hover:scale-105 "
                       style={{
                         objectFit: "contain",
