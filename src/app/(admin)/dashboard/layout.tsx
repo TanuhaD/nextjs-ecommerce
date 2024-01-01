@@ -4,8 +4,8 @@ import { Inter } from "next/font/google";
 import { redirect } from "next/navigation";
 import "@/styles/globals.css";
 import AdminNavBar from "@/components/AdminComponents/AdminNavBar/AdminNavBar";
-import { authOptions } from "../api/auth/authOptions";
-import AdminOrderContextProvider from "./dashboard/orders/AdminOrderContext";
+import { authOptions } from "../../api/auth/authOptions";
+import AdminOrderContextProvider from "./orders/AdminOrderContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,6 +24,7 @@ const RootAdminDashboardLayout = async ({
   if (session?.user.role !== "ADMIN") {
     redirect("/forbidden");
   }
+
   return (
     <html lang="en">
       <body className={inter.className}>
