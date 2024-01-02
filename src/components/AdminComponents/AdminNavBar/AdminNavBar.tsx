@@ -9,7 +9,7 @@ import { redirect } from "next/navigation";
 export default function AdminNavBar() {
   return (
     <div className="navbar  m-auto flex min-w-[300px] max-w-7xl   justify-between rounded-md border bg-base-100 p-4">
-      <h1 className="btn btn-ghost text-xl">Admin panel</h1>
+      <h1 className="text-xl font-bold">Admin panel</h1>
 
       <div className="md:hidden">
         <AdminNavBarMobMenu />
