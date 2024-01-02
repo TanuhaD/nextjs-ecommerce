@@ -37,7 +37,7 @@ const AllOrdersAdminPage = async ({
           <ul className="mb-6 flex flex-col rounded-md border p-4 shadow-md">
             <h1 className="mb-6 rounded-md border p-2 pt-3 text-center  font-bold text-info shadow-md sm:text-xl md:text-3xl">
               {" "}
-              All Oreders
+              All Orders
             </h1>
             <OrderAdminSearch />
             {orders.map((order) => (
