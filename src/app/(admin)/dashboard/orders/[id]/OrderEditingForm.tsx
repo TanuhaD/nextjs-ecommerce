@@ -85,8 +85,8 @@ export default function OrderEditingForm({
 
   const handleAddProduct = () => {
     if (mySetOrderId) {
-      console.log("Setting orderId:", order.id);
       mySetOrderId(order.id);
+      router.replace("/dashboard");
     }
   };
 
