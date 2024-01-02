@@ -1,7 +1,14 @@
 import { prisma } from "@/lib/db/prisma";
+import { Order, Product } from "@prisma/client";
 import { NextResponse } from "next/server";
 
+export interface addProductToOrderResponse {
+  message: string;
+  order: Order | null;
+}
+
 export async function POST(request: Request) {
+  let response: addProductToOrderResponse;
   try {
     const { orderId, productId } = await request.json();
     console.log("orderId:", orderId);
@@ -13,10 +20,8 @@ export async function POST(request: Request) {
     });
 
     if (!order) {
-      return NextResponse.json(
-        { message: "'Order not found'" },
-        { status: 400 },
-      );
+      response = { message: "'Order not found'", order: null };
+      return NextResponse.json(response, { status: 400 });
     }
 
     const product = await prisma.product.findUnique({
@@ -30,12 +35,37 @@ export async function POST(request: Request) {
       );
     }
 
-    await prisma.order.update({
+    const newOrder = await updateOrderItem({ orderId, product });
+    response = {
+      message: "Product added to order successfully",
+      order: newOrder,
+    };
+    return NextResponse.json(response, { status: 200 });
+  } catch (e) {
+    const error = e as Error;
+    return NextResponse.json({ message: error.message }, { status: 500 });
+  }
+}
+
+async function updateOrderItem({
+  orderId,
+  product,
+}: {
+  orderId: string;
+  product: Product;
+}) {
+  const orderItem = await prisma.orderItem.findFirst({
+    where: { orderId, product },
+  });
+  console.log("orderItem:", orderItem);
+  let newOrder;
+  if (!orderItem) {
+    newOrder = await prisma.order.update({
       where: { id: orderId },
       data: {
         items: {
           create: {
-            productId: productId,
+            productId: product.id,
             price: product.price,
             quantity: 1,
           },
@@ -43,13 +73,23 @@ export async function POST(request: Request) {
       },
       include: { items: true },
     });
-
-    return NextResponse.json(
-      { message: "'Product added to order successfully" },
-      { status: 200 },
-    );
-  } catch (e) {
-    const error = e as Error;
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    console.log("newOrder:", newOrder);
+  } else {
+    newOrder = await prisma.order.update({
+      where: { id: orderId },
+      data: {
+        items: {
+          update: {
+            where: { id: orderItem.id },
+            data: {
+              quantity: orderItem.quantity + 1,
+            },
+          },
+        },
+      },
+      include: { items: true },
+    });
+    console.log("newOrder:", newOrder);
   }
+  return newOrder;
 }
