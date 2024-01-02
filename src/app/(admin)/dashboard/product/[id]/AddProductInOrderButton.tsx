@@ -1,11 +1,11 @@
 "use client";
 
-import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
-import { useContext } from "react";
+import withReactContent from "sweetalert2-react-content";
 
 import { useRouter } from "next/navigation";
 import { useAdminOrderContext } from "../../orders/AdminOrderContext";
+import { addProductToOrderResponse } from "@/app/api/add-product-to-order/route";
 
 interface AddProductInOrderButtonProps {
   productId: string;
@@ -17,12 +17,9 @@ export default function AddProductInOrderButton({
   productId,
 }: AddProductInOrderButtonProps) {
   const { orderId } = useAdminOrderContext();
-  console.log("orderId==>", orderId);
   const router = useRouter();
   const handleAddProductInOrder = async () => {
     try {
-      console.log("orderId before fetch:", orderId);
-
       const response = await fetch("/api/add-product-to-order", {
         method: "POST",
         headers: {
@@ -34,14 +31,10 @@ export default function AddProductInOrderButton({
         }),
       });
 
-      // if (!response.ok) {
-      //   throw new Error("Failed to add product to order");
-      // }
+      const updatedOrderData =
+        (await response.json()) as addProductToOrderResponse;
 
-      const updatedOrderData = await response.json();
-      console.log("updatedOrderData", updatedOrderData);
-
-      if (!updatedOrderData.order.id) {
+      if (!updatedOrderData.order?.id) {
         return MySwal.fire({
           icon: "error",
           title: "Failed to add product to order",
@@ -49,14 +42,12 @@ export default function AddProductInOrderButton({
         });
       }
 
-      // mySetOrderId && mySetOrderId(updatedOrderData.order.id);
-
       MySwal.fire({
         icon: "success",
         title: "Product added to order successfully!",
         confirmButtonText: "OK",
       }).then(() => {
-        router.push(`/dashboard/orders/${updatedOrderData.order.id}`);
+        router.push(`/dashboard/orders/${updatedOrderData.order?.id}`);
       });
     } catch (error) {
       console.error("Error adding product to order:", error);
