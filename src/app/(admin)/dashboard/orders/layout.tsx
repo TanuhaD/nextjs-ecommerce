@@ -12,5 +12,5 @@ export default async function AdminLayout({
   if (session?.user.role !== "ADMIN") {
     redirect("/forbidden");
   }
-  return <AdminOrderContextProvider>{children}</AdminOrderContextProvider>;
+  return <>{children}</>;
 }
