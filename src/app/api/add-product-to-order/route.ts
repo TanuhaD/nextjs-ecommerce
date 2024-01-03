@@ -11,8 +11,6 @@ export async function POST(request: Request) {
   let response: addProductToOrderResponse;
   try {
     const { orderId, productId } = await request.json();
-    console.log("orderId:", orderId);
-    console.log("productId:", productId);
 
     const order = await prisma.order.findUnique({
       where: { id: orderId },
@@ -54,8 +52,10 @@ async function updateOrderItem({
   orderId: string;
   product: Product;
 }) {
+  console.log("orderId:", orderId);
+  console.log("productId:", product.id);
   const orderItem = await prisma.orderItem.findFirst({
-    where: { orderId, product },
+    where: { orderId, productId: product.id },
   });
   console.log("orderItem:", orderItem);
   let newOrder;
