@@ -6,6 +6,7 @@ import withReactContent from "sweetalert2-react-content";
 import { useRouter } from "next/navigation";
 import { useAdminOrderContext } from "../../orders/AdminOrderContext";
 import { addProductToOrderResponse } from "@/app/api/add-product-to-order/route";
+import { revalidatePath } from "next/cache";
 
 interface AddProductInOrderButtonProps {
   productId: string;
@@ -48,6 +49,7 @@ export default function AddProductInOrderButton({
         confirmButtonText: "OK",
       }).then(() => {
         router.push(`/dashboard/orders/${updatedOrderData.order?.id}`);
+        router.refresh();
       });
     } catch (error) {
       console.error("Error adding product to order:", error);
@@ -60,11 +62,16 @@ export default function AddProductInOrderButton({
     }
   };
   return (
-    <button
-      className="btn btn-primary shadow-md hover:shadow-xl"
-      onClick={handleAddProductInOrder}
-    >
-      Add product in order
-    </button>
+    <>
+      {orderId ? (
+        <button
+          className="btn btn-primary flex h-auto flex-col items-center justify-center p-3 shadow-md hover:shadow-xl"
+          onClick={handleAddProductInOrder}
+        >
+          <span>Add product in order</span>
+          <span>№ {orderId}</span>
+        </button>
+      ) : null}
+    </>
   );
 }
