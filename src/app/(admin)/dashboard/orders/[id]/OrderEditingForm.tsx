@@ -12,9 +12,7 @@ interface OrderEditingFormProps {
   orderResult: GetOrderByIdResult;
 }
 
-export default function OrderEditingForm({
-  orderResult: { order, error },
-}: OrderEditingFormProps) {
+export default function OrderEditingForm({ orderResult: { order, error } }: OrderEditingFormProps) {
   const [orderItems, setOrderItems] = useState(order?.items || []);
   const [name, setName] = useState(order?.name || "");
   const [phone, setPhone] = useState(order?.phone || "");
@@ -22,6 +20,7 @@ export default function OrderEditingForm({
   const [comments, setComments] = useState(order?.comments || "");
   const [total, setTotal] = useState(order?.total || 0);
   const [status, setStatus] = useState(order?.status || "");
+  const isCompleted = status === "Completed";
   const router = useRouter();
   const { orderId, mySetOrderId } = useAdminOrderContext();
 
@@ -33,19 +32,9 @@ export default function OrderEditingForm({
     );
   }, [orderItems]);
 
-  const handleItemsQuantityChange = ({
-    itemId,
-    newQuantity,
-  }: {
-    itemId: string;
-    newQuantity: string;
-  }) => {
+  const handleItemsQuantityChange = ({ itemId, newQuantity }: { itemId: string; newQuantity: string }) => {
     setOrderItems((prev) => {
-      const newOrders = prev.map((order) =>
-        order.id === itemId
-          ? { ...order, quantity: parseInt(newQuantity) || 0 }
-          : order,
-      );
+      const newOrders = prev.map((order) => (order.id === itemId ? { ...order, quantity: parseInt(newQuantity) || 0 } : order));
       return newOrders;
     });
   };
@@ -59,6 +48,7 @@ export default function OrderEditingForm({
       address: address,
       comments,
       total,
+      status,
     };
     const result = await fetch("/api/update-order-admin", {
       method: "POST",
@@ -92,33 +82,35 @@ export default function OrderEditingForm({
 
   return (
     <div className=" mb-6  rounded-md border-2 border-solid  border-primary bg-slate-50 p-4 shadow-md ">
-      <h1 className=" mb-6 rounded-md border p-2 pt-3  text-center font-bold text-info  shadow-md sm:text-xs md:text-3xl">
+      <h1 className=" mb-6 rounded-md border p-2 pt-3  text-center font-bold text-info  shadow-md sm:text-xs md:text-2xl">
         Order {order.id || orderId}
       </h1>
       <div className="mb-4 gap-6  rounded-md border p-4  shadow-md">
-        <p className=" border-b-2 border-gray-200 p-4 font-medium text-info sm:text-sm md:text-2xl ">
+        <p className=" border-b-2 border-gray-200 p-4 font-medium text-info sm:text-sm md:text-xl ">
           Name:{" "}
           <input
             type="text"
-            className="input input-ghost ml-2 w-full max-w-xs sm:text-sm md:text-2xl"
+            className="input input-ghost ml-2 w-full max-w-xs sm:text-sm md:text-xl"
             onChange={(e) => {
               setName(e.target.value);
             }}
             value={name}
+            disabled={isCompleted}
           />
         </p>
-        <p className=" border-b-2 border-gray-200 p-4 font-medium text-info sm:text-sm md:text-2xl ">
+        <p className=" border-b-2 border-gray-200 p-4 font-medium text-info sm:text-sm md:text-xl ">
           Phone:
           <input
             type="text"
-            className="input input-ghost ml-2 w-full max-w-xs sm:text-sm md:text-2xl"
+            className="input input-ghost ml-2 w-full max-w-xs sm:text-sm md:text-xl"
             onChange={(e) => {
               setPhone(e.target.value);
             }}
             value={phone}
+            disabled={isCompleted}
           />
         </p>
-        <p className=" border-b-2 border-gray-200 p-4 font-medium text-info sm:text-sm md:text-2xl ">
+        <p className=" border-b-2 border-gray-200 p-4 font-medium text-info sm:text-sm md:text-xl ">
           Address:
           <input
             type="text"
@@ -127,54 +119,42 @@ export default function OrderEditingForm({
               setAddress(e.target.value);
             }}
             value={address}
+            disabled={isCompleted}
           />
         </p>
-        <p className=" border-b-2 border-gray-200 p-4 font-medium text-info sm:text-sm md:text-2xl ">
+        <p className=" border-b-2 border-gray-200 p-4 font-medium text-info sm:text-sm md:text-xl ">
           Comments:
           <input
             type="text"
-            className="input input-ghost ml-2 w-full max-w-xs sm:text-sm md:text-2xl"
+            className="input input-ghost ml-2 w-full max-w-xs sm:text-sm md:text-xl"
             onChange={(e) => {
               setComments(e.target.value);
             }}
             value={comments}
+            disabled={isCompleted}
           />
         </p>
       </div>
       <ul>
         {order.items.map((item) => {
-          return (
-            <OrderInfoProduct
-              key={item.id}
-              item={item}
-              quantityChangeHandler={handleItemsQuantityChange}
-            />
-          );
+          return <OrderInfoProduct key={item.id} item={item} status={status} quantityChangeHandler={handleItemsQuantityChange} />;
         })}
       </ul>
       <div className="flex items-center gap-4 rounded-md border border-warning p-6 shadow-md sm:flex-col md:mb-4 md:mt-4 md:flex-row">
-        <p className=" font-bold sm:text-sm md:text-2xl">
-          Add a new product to the order
-        </p>
-        <button
-          className="btn btn-primary p-4 font-bold shadow-md"
-          onClick={handleAddProduct}
-        >
+        <p className=" font-bold sm:text-sm md:text-xl">Add a new product to the order</p>
+        <button className="btn btn-primary p-4 font-bold shadow-md" onClick={handleAddProduct} disabled={isCompleted}>
           Add
         </button>
       </div>
       <div className="flex flex-col  justify-center gap-4 p-4 font-semibold">
-        <p className="font-bold sm:text-sm md:text-2xl">
-          Total: {total / 100} $
+        <p className="font-bold sm:text-sm md:text-xl">Total: {total / 100} $</p>
+        <p className="font-bold sm:text-sm md:text-xl">
+          Created: {order.createdAt.getDate()}.{order.createdAt.getMonth()}.{order.createdAt.getFullYear()}
         </p>
-        <p className="font-bold sm:text-sm md:text-2xl">
-          Created: {order.createdAt.getDate()}.{order.createdAt.getMonth()}.
-          {order.createdAt.getFullYear()}
-        </p>
-        <p className="font-bold sm:text-sm md:text-2xl">
+        <p className="font-bold sm:text-sm md:text-xl">
           Status:
           <select
-            className="select select-ghost mb-3 ml-3 mt-3 w-full max-w-xs rounded-md border  border-warning sm:text-sm md:text-2xl"
+            className="select select-ghost mb-3 ml-3 mt-3 w-full max-w-xs rounded-md border  border-warning sm:text-sm md:text-xl"
             defaultValue={status}
             onChange={(e) => setStatus(e.target.value)}
           >
@@ -190,10 +170,7 @@ export default function OrderEditingForm({
         </p>
       </div>
       <div className="flex justify-end">
-        <button
-          onClick={handleOrderChange}
-          className="btn btn-primary shadow-md "
-        >
+        <button onClick={handleOrderChange} className="btn btn-primary shadow-md ">
           Save order
         </button>
       </div>
