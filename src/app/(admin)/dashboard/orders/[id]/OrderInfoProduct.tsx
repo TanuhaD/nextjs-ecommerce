@@ -4,20 +4,12 @@ import { useEffect, useState } from "react";
 
 interface OrderInfoProductProps {
   item: OrderItemWithProduct;
-  quantityChangeHandler: ({
-    itemId,
-    newQuantity,
-  }: {
-    itemId: string;
-    newQuantity: string;
-  }) => void;
+  status: string;
+  quantityChangeHandler: ({ itemId, newQuantity }: { itemId: string; newQuantity: string }) => void;
 }
-export default function OrderInfoProduct({
-  item,
-  quantityChangeHandler,
-}: OrderInfoProductProps) {
+export default function OrderInfoProduct({ item, status, quantityChangeHandler }: OrderInfoProductProps) {
   const [quantity, setQuantity] = useState<string>(item.quantity + "");
-
+  const isCompleted = status === "Completed";
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuantity(e.target.value);
     quantityChangeHandler({
@@ -38,22 +30,19 @@ export default function OrderInfoProduct({
           />
         </div>
         <div className=" gap-4">
-          <p className="font-medium text-info sm:text-sm md:text-2xl">
-            {item.product.name}
-          </p>
-          <p className="font-medium sm:text-sm md:text-2xl">
-            Price: {item.price / 100} $
-          </p>
-          <p className=" flex flex-row items-center font-medium sm:text-sm md:text-2xl">
+          <p className="font-medium text-info sm:text-sm md:text-xl">{item.product.name}</p>
+          <p className="font-medium sm:text-sm md:text-xl">Price: {item.price / 100} $</p>
+          <p className=" flex flex-row items-center font-medium sm:text-sm md:text-xl">
             Quantity:
             <input
               type="number"
-              className="input  input-ghost ml-2   max-w-[100px] sm:text-sm md:text-2xl"
+              className="input  input-ghost ml-2   max-w-[100px] sm:text-sm md:text-xl"
               onChange={handleQuantityChange}
               onBlur={(e) => {
                 if (e.target.value === "") setQuantity("0");
               }}
               value={quantity}
+              disabled={isCompleted}
             />
             {quantity === "0" && <span>Item will be removed</span>}
           </p>
