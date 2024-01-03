@@ -12,9 +12,7 @@ import { prisma } from "@/lib/db/prisma";
 interface AllOrdersAdminPageProps {
   searchParams: { page: string };
 }
-const AllOrdersAdminPage = async ({
-  searchParams: { page = "1" },
-}: AllOrdersAdminPageProps) => {
+const AllOrdersAdminPage = async ({ searchParams: { page = "1" } }: AllOrdersAdminPageProps) => {
   const { orders, error } = await GetAllOrders();
 
   const currentPage = parseInt(page);
@@ -41,41 +39,25 @@ const AllOrdersAdminPage = async ({
             </h1>
             <OrderAdminSearch />
             {orders.map((order) => (
-              <li
-                key={order.id}
-                className=" mb-6 rounded-md border-2 border-solid border-primary bg-slate-50  p-4 shadow-md"
-              >
+              <li key={order.id} className=" mb-6 rounded-md border-2 border-solid border-primary bg-slate-50  p-4 shadow-md">
                 <OrderAdminInfoUser order={order} />
                 <OrderAdminInfoCustomer order={order} />
                 <div className="flex flex-col gap-4  ">
                   <ul>
                     {order.items.map((item) => {
-                      return (
-                        <OrderAdminInfoProduct item={item} key={item.id} />
-                      );
+                      return <OrderAdminInfoProduct item={item} key={item.id} />;
                     })}
                   </ul>
                   <div className="flex flex-col justify-between gap-2 rounded-md border p-4  font-semibold shadow-md  md:flex-row md:items-center">
                     <div>
-                      <p className="font-medium sm:text-sm md:text-2xl">
-                        Totall: {order.total / 100} $
-                      </p>
-                      <p className="font-medium sm:text-sm md:text-2xl">
-                        Status: {order.status}
-                      </p>
-                      <p className="font-medium sm:text-sm md:text-2xl">
-                        PaymentStatus: {order.paymentStatus}
-                      </p>
-                      <p className="font-bold sm:text-sm md:text-2xl">
-                        Created: {order.createdAt.getDate()}.
-                        {order.createdAt.getMonth()}.
-                        {order.createdAt.getFullYear()}
+                      <p className="font-medium sm:text-sm md:text-xl">Totall: {order.total / 100} $</p>
+                      <p className="font-medium sm:text-sm md:text-xl">Status: {order.status}</p>
+                      <p className="font-medium sm:text-sm md:text-xl">PaymentStatus: {order.paymentStatus}</p>
+                      <p className="font-bold sm:text-sm md:text-xl">
+                        Created: {order.createdAt.getDate()}.{order.createdAt.getMonth()}.{order.createdAt.getFullYear()}
                       </p>
                     </div>
-                    <Link
-                      href={`/dashboard/orders/${order.id}`}
-                      className="btn btn-primary font-bold shadow-md hover:shadow-xl"
-                    >
+                    <Link href={`/dashboard/orders/${order.id}`} className="btn btn-primary font-bold shadow-md hover:shadow-xl">
                       Choose
                     </Link>
                   </div>
@@ -85,10 +67,7 @@ const AllOrdersAdminPage = async ({
           </ul>
           {totalPages > 1 && (
             <div className="m-4 flex justify-center">
-              <PaginationBar
-                currentPage={currentPage}
-                totalPages={totalPages}
-              />
+              <PaginationBar currentPage={currentPage} totalPages={totalPages} />
             </div>
           )}
         </>
