@@ -1,8 +1,4 @@
-import {
-  GetAllOrdersWithProductsResult,
-  OrderItemWithProduct,
-  OrderWithProducts,
-} from "@/lib/db/order";
+import { GetAllOrdersWithProductsResult, OrderItemWithProduct, OrderWithProducts } from "@/lib/db/order";
 import Image from "next/image";
 
 interface OrderInfoProductProps {
@@ -26,15 +22,9 @@ export default function OrderAdminInfoProduct({ item }: OrderInfoProductProps) {
           />
         </div>
         <div className="gap-4">
-          <p className="break-words font-medium text-info sm:text-sm md:text-2xl">
-            {item.product.name}
-          </p>
-          <p className="font-medium sm:text-sm md:text-2xl">
-            Price: {item.price / 100} $
-          </p>
-          <p className=" font-medium sm:text-sm md:text-2xl">
-            Quantity: {item.quantity}
-          </p>
+          <p className="break-words font-medium text-info sm:text-sm md:text-xl">{item.product.name}</p>
+          <p className="font-medium sm:text-sm md:text-xl">Price: {item.price / 100} $</p>
+          <p className=" font-medium sm:text-sm md:text-xl">Quantity: {item.quantity}</p>
         </div>
       </li>
     </>
