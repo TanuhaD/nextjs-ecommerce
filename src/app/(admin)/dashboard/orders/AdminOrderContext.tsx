@@ -25,19 +25,9 @@ export default function AdminOrderContextProvider({
   const mySetOrderId = (newOrderId: string) => {
     setOrderId(newOrderId);
   };
-  useEffect(() => {
-    console.log("setup function");
 
-    return () => {
-      console.log("cleanup function");
-    };
-  }, []);
   return (
     <AdminOrderContext.Provider value={{ orderId, mySetOrderId }}>
-      <div className="flex items-center justify-center p-6 font-bold text-info sm:flex-col md:flex-row">
-        <p className="md:mr-3">Admin order information : </p>
-        <p>{orderId || " no order "}</p>
-      </div>
       {children}
     </AdminOrderContext.Provider>
   );
