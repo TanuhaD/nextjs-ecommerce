@@ -5,7 +5,7 @@ import withReactContent from "sweetalert2-react-content";
 
 import { useRouter } from "next/navigation";
 import { useAdminOrderContext } from "../../orders/AdminOrderContext";
-import { addProductToOrderResponse } from "@/app/api/add-product-to-order/route";
+import { addProductToOrderRequest, addProductToOrderResponse } from "@/app/api/add-product-to-order/route";
 import { revalidatePath } from "next/cache";
 
 interface AddProductInOrderButtonProps {
@@ -14,13 +14,15 @@ interface AddProductInOrderButtonProps {
 
 const MySwal = withReactContent(Swal);
 
-export default function AddProductInOrderButton({
-  productId,
-}: AddProductInOrderButtonProps) {
+export default function AddProductInOrderButton({ productId }: AddProductInOrderButtonProps) {
   const { orderId } = useAdminOrderContext();
   const router = useRouter();
   const handleAddProductInOrder = async () => {
     try {
+      const request: addProductToOrderRequest = {
+        orderId,
+        productId,
+      };
       const response = await fetch("/api/add-product-to-order", {
         method: "POST",
         headers: {
@@ -32,10 +34,9 @@ export default function AddProductInOrderButton({
         }),
       });
 
-      const updatedOrderData =
-        (await response.json()) as addProductToOrderResponse;
+      const updatedOrderData = (await response.json()) as addProductToOrderResponse;
 
-      if (!updatedOrderData.order?.id) {
+      if (!updatedOrderData.orderId) {
         return MySwal.fire({
           icon: "error",
           title: "Failed to add product to order",
@@ -48,7 +49,7 @@ export default function AddProductInOrderButton({
         title: "Product added to order successfully!",
         confirmButtonText: "OK",
       }).then(() => {
-        router.push(`/dashboard/orders/${updatedOrderData.order?.id}`);
+        router.push(`/dashboard/orders/${updatedOrderData.orderId}`);
         router.refresh();
       });
     } catch (error) {
