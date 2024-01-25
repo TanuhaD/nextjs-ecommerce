@@ -34,7 +34,9 @@ export default function OrderEditingForm({ orderResult: { order, error } }: Orde
 
   const handleItemsQuantityChange = ({ itemId, newQuantity }: { itemId: string; newQuantity: string }) => {
     setOrderItems((prev) => {
-      const newOrders = prev.map((order) => (order.id === itemId ? { ...order, quantity: parseInt(newQuantity) || 0 } : order));
+      const newOrders = prev.map((order) =>
+        order.id === itemId ? { ...order, quantity: parseInt(newQuantity) || 0 } : order,
+      );
       return newOrders;
     });
   };
@@ -137,12 +139,23 @@ export default function OrderEditingForm({ orderResult: { order, error } }: Orde
       </div>
       <ul>
         {order.items.map((item) => {
-          return <OrderInfoProduct key={item.id} item={item} status={status} quantityChangeHandler={handleItemsQuantityChange} />;
+          return (
+            <OrderInfoProduct
+              key={item.id}
+              item={item}
+              status={status}
+              quantityChangeHandler={handleItemsQuantityChange}
+            />
+          );
         })}
       </ul>
       <div className="flex items-center gap-4 rounded-md border border-warning p-6 shadow-md sm:flex-col md:mb-4 md:mt-4 md:flex-row">
         <p className=" font-bold sm:text-sm md:text-xl">Add a new product to the order</p>
-        <button className="btn btn-primary p-4 font-bold shadow-md" onClick={handleAddProduct} disabled={isCompleted}>
+        <button
+          className="btn btn-primary p-4 font-bold shadow-md"
+          onClick={handleAddProduct}
+          disabled={isCompleted}
+        >
           Add
         </button>
       </div>
