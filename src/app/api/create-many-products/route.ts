@@ -6,9 +6,9 @@ import { nanoid } from "nanoid";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { z, ZodError } from "zod";
-const schema = z.object({
-  name: z.string().nonempty(),
-  description: z.string().nonempty(),
+export const schema = z.object({
+  name: z.string().min(1),
+  description: z.string().min(1),
   price: z.number().nonnegative(),
   imageUrl: z.string(),
 });
@@ -19,7 +19,7 @@ export async function POST(request: Request) {
     if (!Array.isArray(res))
       return NextResponse.json(
         { message: "There should be an array of objects in the request body" },
-        { status: 400 }
+        { status: 400 },
       );
   } catch (error: any) {
     return NextResponse.json({ message: error.message }, { status: 400 });
@@ -52,10 +52,7 @@ export async function POST(request: Request) {
         }
         const buffer = fetchResult.buffer;
         const originalName = nanoid() + "." + fetchResult.fileExtension;
-        const uploadResult = await uploadFileToGoogleStorage(
-          buffer,
-          originalName
-        );
+        const uploadResult = await uploadFileToGoogleStorage(buffer, originalName);
         if (uploadResult.status === "FAIL") {
           console.error(uploadResult.error);
         }
@@ -82,7 +79,5 @@ export async function POST(request: Request) {
     data: productArrayForDB,
   });
   revalidatePath("/");
-  return new Response(
-    JSON.stringify({ message: "success", count: prismaResult.count })
-  );
+  return new Response(JSON.stringify({ message: "success", count: prismaResult.count }));
 }
