@@ -10,15 +10,13 @@ import { prisma } from "@/lib/db/prisma";
 
 export const metadata = {
   metadataBase: new URL(env.BASE_URL),
-  title: "Your order - Flowmazon",
+  title: "Your order - PrimePicks",
 };
 
 interface OrderProps {
   searchParams: { page: string };
 }
-export default async function OrderPage({
-  searchParams: { page = "1" },
-}: OrderProps) {
+export default async function OrderPage({ searchParams: { page = "1" } }: OrderProps) {
   const session = await getServerSession(authOptions);
   if (!session) {
     redirect("/api/auth/signin?callbackUrl=/add-product");
@@ -48,9 +46,7 @@ export default async function OrderPage({
       })}
 
       <div className="m-auto flex justify-center">
-        {totalPages > 1 && (
-          <PaginationBar currentPage={currentPage} totalPages={totalPages} />
-        )}
+        {totalPages > 1 && <PaginationBar currentPage={currentPage} totalPages={totalPages} />}
       </div>
     </>
   );
