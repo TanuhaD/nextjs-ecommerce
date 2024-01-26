@@ -1,13 +1,12 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { MySwal } from "@/lib/sweet-alert";
 
 import { useFormState, useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
-import { ZodError, z } from "zod";
+
 import { useFormValidationHook } from "./useFormValidationHook";
 import { PlaceOrderResult } from "./action";
-import { stat } from "fs";
 
 const initialState: PlaceOrderResult = {
   validationErrors: null,
@@ -67,9 +66,7 @@ export const PlacingAnOrderForm: React.FC<{
           />
           <div className="label">
             {nameValidationMessage && (
-              <span className="label-text-alt text-red-700">
-                {nameValidationMessage}
-              </span>
+              <span className="label-text-alt text-red-700">{nameValidationMessage}</span>
             )}
           </div>
         </label>
@@ -86,9 +83,7 @@ export const PlacingAnOrderForm: React.FC<{
           />
           <div className="label">
             {phoneValidationMessage && (
-              <span className="label-text-alt text-red-700">
-                {phoneValidationMessage}
-              </span>
+              <span className="label-text-alt text-red-700">{phoneValidationMessage}</span>
             )}
           </div>
         </label>
@@ -102,9 +97,7 @@ export const PlacingAnOrderForm: React.FC<{
           />
           <div className="label">
             {emailValidationMessage && (
-              <span className="label-text-alt text-red-700">
-                {emailValidationMessage}
-              </span>
+              <span className="label-text-alt text-red-700">{emailValidationMessage}</span>
             )}
           </div>
         </label>
@@ -118,9 +111,7 @@ export const PlacingAnOrderForm: React.FC<{
           />
           <div className="label">
             {addressValidationMessage && (
-              <span className="label-text-alt text-red-700">
-                {addressValidationMessage}
-              </span>
+              <span className="label-text-alt text-red-700">{addressValidationMessage}</span>
             )}
           </div>
         </label>
@@ -132,9 +123,7 @@ export const PlacingAnOrderForm: React.FC<{
           />
           <div className="label">
             {commentsValidationMessage && (
-              <span className="label-text-alt text-red-700">
-                {commentsValidationMessage}
-              </span>
+              <span className="label-text-alt text-red-700">{commentsValidationMessage}</span>
             )}
           </div>
         </label>
