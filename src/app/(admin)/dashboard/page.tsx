@@ -3,15 +3,12 @@ import PaginationBar from "@/components/PaginationBar/PaginationBar";
 
 import { prisma } from "@/lib/db/prisma";
 import { redirect } from "next/navigation";
-import { useAdminOrderContext } from "./orders/AdminOrderContext";
 
 interface DashboardProps {
   searchParams: { page: string };
 }
 
-const DashboardPage = async ({
-  searchParams: { page = "1" },
-}: DashboardProps) => {
+const DashboardPage = async ({ searchParams: { page = "1" } }: DashboardProps) => {
   const currentPage = parseInt(page);
 
   const pageSize = 6;
@@ -23,8 +20,7 @@ const DashboardPage = async ({
 
   const products = await prisma.product.findMany({
     orderBy: { id: "desc" },
-    skip:
-      (currentPage - 1) * pageSize + (currentPage === 1 ? 0 : heroItemCount),
+    skip: (currentPage - 1) * pageSize + (currentPage === 1 ? 0 : heroItemCount),
     take: pageSize + (currentPage === 1 ? heroItemCount : 0),
   });
 
@@ -53,9 +49,7 @@ const DashboardPage = async ({
           return <AdminProductCard key={product.id} product={product} />;
         })}
       </div>
-      {totalPages > 1 && (
-        <PaginationBar currentPage={currentPage} totalPages={totalPages} />
-      )}
+      {totalPages > 1 && <PaginationBar currentPage={currentPage} totalPages={totalPages} />}
     </div>
   );
 };
