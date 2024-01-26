@@ -41,6 +41,10 @@ export async function POST(request: Request) {
     }
 
     const { result } = await updateOrderItem({ orderId, product });
+    if (!result) {
+      response = { message: "Product not added to order", orderId: null };
+      return NextResponse.json(response, { status: 500 });
+    }
     response = {
       message: "Product added to order successfully",
       orderId: order.id,
