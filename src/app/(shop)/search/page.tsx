@@ -9,18 +9,14 @@ interface SearchProps {
   };
 }
 
-export function generateMetadata({
-  searchParams: { query },
-}: SearchProps): Metadata {
+export function generateMetadata({ searchParams: { query } }: SearchProps): Metadata {
   return {
     metadataBase: new URL(env.BASE_URL),
-    title: `Search results for ${query}-Flomazon`,
+    title: `Search results for ${query}-PrimePicks`,
   };
 }
 
-export default async function SearchPage({
-  searchParams: { query },
-}: SearchProps) {
+export default async function SearchPage({ searchParams: { query } }: SearchProps) {
   const products = await prisma.product.findMany({
     where: {
       OR: [
