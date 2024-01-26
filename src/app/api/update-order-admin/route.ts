@@ -3,9 +3,25 @@ import { prisma } from "@/lib/db/prisma";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
+export interface orderEditingFormRequest {
+  id: string;
+  name: string;
+  phone: string;
+  address: string;
+  comments: string;
+  status: string;
+  total: number;
+  items: OrderItemWithProduct[];
+}
+export interface orderEditingFormResponse {
+  message: string;
+  orderId: string | null;
+}
 export async function POST(request: Request) {
+  let response: orderEditingFormResponse;
   try {
-    const body = await request.json();
+    const body = (await request.json()) as orderEditingFormRequest;
+
     const order = await prisma.order.update({
       where: { id: body.id },
       data: {
@@ -32,9 +48,11 @@ export async function POST(request: Request) {
       },
     });
     revalidatePath(`/api/orders/${order.id}`);
-    return NextResponse.json({ order }, { status: 200 });
-  } catch (error: any) {
-    console.log(error);
-    return NextResponse.json({ message: error.message }, { status: 400 });
+    response = { message: "Order updated", orderId: order.id };
+    return NextResponse.json(response, { status: 200 });
+  } catch (e) {
+    const error = e as Error;
+    response = { message: "Order not updated" + error.message, orderId: null };
+    return NextResponse.json(response, { status: 400 });
   }
 }
