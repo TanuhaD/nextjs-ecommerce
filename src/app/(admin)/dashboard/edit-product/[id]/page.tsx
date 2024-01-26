@@ -13,12 +13,10 @@ interface ProductPageProps {
 }
 export const metadata = {
   metadataBase: new URL(env.BASE_URL),
-  title: "Edit Product Flowmazon",
+  title: "Edit Product PrimePicks",
 };
 
-export default async function EditProductPage({
-  params: { id },
-}: ProductPageProps) {
+export default async function EditProductPage({ params: { id } }: ProductPageProps) {
   const session = await getServerSession(authOptions);
   if (!session) {
     redirect("/api/auth/signin?callbackUrl=/add-product");
