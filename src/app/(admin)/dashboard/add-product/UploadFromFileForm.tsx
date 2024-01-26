@@ -1,9 +1,10 @@
 "use client";
+import { schema } from "@/app/api/create-many-products/route";
 import { MySwal } from "@/lib/sweet-alert";
 import { ChangeEvent, useState } from "react";
 
 export default function UploadFromFileForm() {
-  const [json, setJson] = useState<any>(null);
+  const [json, setJson] = useState<Array<typeof schema>>([]);
   const [isloading, setIsloading] = useState<boolean>(false);
 
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
@@ -25,7 +26,7 @@ export default function UploadFromFileForm() {
           });
         };
       } else {
-        setJson(null);
+        setJson([]);
       }
     } else {
       MySwal.fire({
@@ -38,7 +39,7 @@ export default function UploadFromFileForm() {
   };
 
   const handleUploadClickBtn = async () => {
-    if (!json) {
+    if (!json.length) {
       MySwal.fire({
         title: "Error",
         text: "No file selected",
@@ -92,9 +93,7 @@ export default function UploadFromFileForm() {
       >
         Upload from file
       </button>
-      {isloading && (
-        <span className="loading loading-spinner loading-lg"></span>
-      )}
+      {isloading && <span className="loading loading-spinner loading-lg"></span>}
     </div>
   );
 }
