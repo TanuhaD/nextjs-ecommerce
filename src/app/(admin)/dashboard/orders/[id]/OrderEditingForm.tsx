@@ -7,6 +7,7 @@ import { MySwal } from "@/lib/sweet-alert";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAdminOrderContext } from "../AdminOrderContext";
+import { orderEditingFormRequest, orderEditingFormResponse } from "@/app/api/update-order-admin/route";
 
 interface OrderEditingFormProps {
   orderResult: GetOrderByIdResult;
@@ -42,8 +43,9 @@ export default function OrderEditingForm({ orderResult: { order, error } }: Orde
   };
 
   const handleOrderChange = async () => {
-    const newOrder = {
+    const newOrder: orderEditingFormRequest = {
       ...order,
+      id: order?.id!,
       items: orderItems,
       name,
       phone,
@@ -56,14 +58,21 @@ export default function OrderEditingForm({ orderResult: { order, error } }: Orde
       method: "POST",
       body: JSON.stringify(newOrder),
     });
-    const data = await result.json();
-    if (data.order) {
+    const data = (await result.json()) as orderEditingFormResponse;
+    if (data.orderId) {
       MySwal.fire({
         icon: "success",
-        title: `Order ${data.order.id} updated successfully`,
+        title: `Order ${data.orderId} updated successfully`,
         confirmButtonText: "OK",
       }).then(() => {
         router.refresh();
+      });
+    } else {
+      MySwal.fire({
+        icon: "error",
+        title: `Order ${data.orderId} not updated`,
+        text: data.message,
+        confirmButtonText: "OK",
       });
     }
   };
