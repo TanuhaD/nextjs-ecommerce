@@ -1,37 +1,40 @@
 "use client";
 
+import { deleteProductByIdRequest, deleteProductByIdResponse } from "@/app/api/delete-product-by-id/route";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
 interface DeleteProductButtonProps {
-  productId: string;
+  productId: string | null;
 }
+
 const MySwal = withReactContent(Swal);
-export default function DeleteProductButton({
-  productId,
-}: DeleteProductButtonProps): JSX.Element {
+export default function DeleteProductButton({ productId }: DeleteProductButtonProps): JSX.Element {
   const router = useRouter();
 
   const handleDeleteProductBtn = async () => {
-    const response = await fetch("/api/delete-product-by-id", {
+    let request: deleteProductByIdRequest;
+    request = {
+      productId,
+    };
+    const fetchResponse = await fetch("/api/delete-product-by-id", {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ productId: productId }),
+      body: JSON.stringify(request),
     });
-    if (response.ok) {
+    if (fetchResponse.ok) {
       MySwal.fire({
         title: "Deleted!",
         text: "Your product has been deleted.",
         icon: "success",
       }).then(() => {
-        // window.location.href = "/";
         router.push("/dashboard");
       });
     } else {
-      const { message } = await response.json();
+      const { message } = (await fetchResponse.json()) as deleteProductByIdResponse;
       MySwal.fire({
         title: "Error",
         text: "Error deleting product: " + message,
@@ -59,10 +62,7 @@ export default function DeleteProductButton({
 
   return (
     <div className="mt-3 flex items-center gap-2">
-      <button
-        className="btn btn-primary shadow-md hover:shadow-xl"
-        onClick={hundleClickBtn}
-      >
+      <button className="btn btn-primary shadow-md hover:shadow-xl" onClick={hundleClickBtn}>
         Delete Product
       </button>
     </div>
