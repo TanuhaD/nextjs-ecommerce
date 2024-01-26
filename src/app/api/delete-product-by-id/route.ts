@@ -6,15 +6,27 @@ import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
 import { authOptions } from "../auth/authOptions";
 
+export interface deleteProductByIdResponse {
+  message: string;
+  productId: string | null;
+}
+export interface deleteProductByIdRequest {
+  productId: string | null;
+}
+
 export async function DELETE(request: Request) {
   const session = await getServerSession(authOptions);
-
   if (!session) {
     redirect("/api/auth/signin?callbackUrl=/add-product");
   } else if (session.user.role !== "ADMIN") {
     redirect("/forbidden");
   }
-  const { productId } = await request.json();
+  let response: deleteProductByIdResponse;
+  const { productId } = (await request.json()) as deleteProductByIdRequest;
+  if (!productId) {
+    response = { message: "No productId", productId: null };
+    return NextResponse.json(response, { status: 400 });
+  }
   try {
     const deletedProduct = await prisma.product.delete({
       where: { id: productId },
@@ -24,12 +36,11 @@ export async function DELETE(request: Request) {
     }
     revalidatePath("/");
     revalidatePath("/dashboard");
-    return NextResponse.json(
-      { message: "'Product deleted successfully'" },
-      { status: 200 },
-    );
+    response = { message: "'Product deleted successfully'", productId: productId };
+    return NextResponse.json(response, { status: 200 });
   } catch (e) {
     const error = e as Error;
-    return NextResponse.json({ message: error.message }, { status: 400 });
+    response = { message: "Product not deleted" + error.message, productId: null };
+    return NextResponse.json(response, { status: 400 });
   }
 }
