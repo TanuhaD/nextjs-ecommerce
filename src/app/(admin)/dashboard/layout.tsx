@@ -11,15 +11,11 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   metadataBase: new URL(env.BASE_URL),
-  title: "Flowmazon",
+  title: "PrimePicks",
   description: "We make your wallet cry",
 };
 
-const RootAdminDashboardLayout = async ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+const RootAdminDashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   const session = await getServerSession(authOptions);
   if (session?.user.role !== "ADMIN") {
     redirect("/forbidden");
@@ -30,9 +26,7 @@ const RootAdminDashboardLayout = async ({
       <body className={inter.className}>
         <AdminOrderContextProvider>
           <AdminNavBar />
-          <main className=" m-auto min-w-[300px] max-w-7xl p-4">
-            {children}
-          </main>
+          <main className=" m-auto min-w-[300px] max-w-7xl p-4">{children}</main>
         </AdminOrderContextProvider>
       </body>
     </html>
