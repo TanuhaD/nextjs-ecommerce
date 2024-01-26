@@ -1,4 +1,4 @@
-import { GetOrderBuId, OrderWithProducts } from "@/lib/db/order";
+import { GetOrderBuId } from "@/lib/db/order";
 import OrderEditingForm from "./OrderEditingForm";
 
 interface AdminOrderPageProps {
@@ -6,9 +6,7 @@ interface AdminOrderPageProps {
     id: string;
   };
 }
-const AdminOrderPage: React.FC<AdminOrderPageProps> = async ({
-  params: { id },
-}) => {
+const AdminOrderPage: React.FC<AdminOrderPageProps> = async ({ params: { id } }) => {
   if (!id) {
     // Обробляйте ситуацію, коли id невизначено.
     return <div>Invalid ID</div>;
