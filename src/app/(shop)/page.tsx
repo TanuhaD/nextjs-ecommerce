@@ -9,9 +9,7 @@ interface HomeProps {
   searchParams: { page: string; filter: string };
 }
 
-export default async function Home({
-  searchParams: { page = "1", filter = "all" },
-}: HomeProps) {
+export default async function Home({ searchParams: { page = "1", filter = "all" } }: HomeProps) {
   const currentPage = parseInt(page);
 
   const pageSize = 6;
@@ -32,8 +30,7 @@ export default async function Home({
       },
     },
     orderBy: { id: "desc" },
-    skip:
-      (currentPage - 1) * pageSize + (currentPage === 1 ? 0 : heroItemCount),
+    skip: (currentPage - 1) * pageSize + (currentPage === 1 ? 0 : heroItemCount),
     take: pageSize + (currentPage === 1 ? heroItemCount : 0),
   });
 
@@ -46,29 +43,17 @@ export default async function Home({
 
   return (
     <div className="flex flex-col items-center ">
-      <div className="  mb-2 flex gap-4 rounded border-2 border-primary font-bold sm:p-2 md:p-4">
-        <Link
-          href={`?filter=all`}
-          className="hover:text-primary focus:text-primary"
-        >
+      <div className="  mb-2 flex gap-4 rounded border-2 border-primary font-bold sm:p-2 sm:text-xs md:p-4 md:text-lg lg:text-2xl">
+        <Link href={`?filter=all`} className="hover:text-primary focus:text-primary">
           All products
         </Link>
-        <Link
-          href={`?filter=misc`}
-          className="hover:text-primary focus:text-primary"
-        >
+        <Link href={`?filter=misc`} className="hover:text-primary focus:text-primary">
           Misc
         </Link>
-        <Link
-          href={`?filter=shoes`}
-          className="hover:text-primary focus:text-primary"
-        >
+        <Link href={`?filter=shoes`} className="hover:text-primary focus:text-primary">
           Shoes
         </Link>
-        <Link
-          href={`?filter=cosmetics`}
-          className="hover:text-primary focus:text-primary"
-        >
+        <Link href={`?filter=cosmetics`} className="hover:text-primary focus:text-primary">
           Cosmetics
         </Link>
       </div>
@@ -84,12 +69,9 @@ export default async function Home({
               priority
             />
             <div className="sm:max-w-[270px]">
-              <h1 className="text-5xl font-bold">{featuredProduct.name}</h1>
-              <p className="break-words  py-6">{featuredProduct.description}</p>
-              <Link
-                href={"/product/" + featuredProduct.id}
-                className="btn btn-primary"
-              >
+              <h1 className="font-bold sm:text-lg md:text-3xl lg:text-5xl">{featuredProduct.name}</h1>
+              <p className="break-words  py-6 sm:text-sm md:text-lg">{featuredProduct.description}</p>
+              <Link href={"/product/" + featuredProduct.id} className="btn btn-primary">
                 Check it out
               </Link>
             </div>
@@ -102,9 +84,7 @@ export default async function Home({
           return <ProductCard key={product.id} product={product} />;
         })}
       </div>
-      {totalPages > 1 && (
-        <PaginationBar currentPage={currentPage} totalPages={totalPages} />
-      )}
+      {totalPages > 1 && <PaginationBar currentPage={currentPage} totalPages={totalPages} />}
     </div>
   );
 }
