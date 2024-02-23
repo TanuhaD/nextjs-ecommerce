@@ -6,7 +6,7 @@ import { nanoid } from "nanoid";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { z, ZodError } from "zod";
-export const schema = z.object({
+const schema = z.object({
   name: z.string().min(1),
   description: z.string().min(1),
   price: z.number().nonnegative(),
