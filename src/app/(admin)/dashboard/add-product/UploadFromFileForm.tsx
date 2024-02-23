@@ -1,10 +1,11 @@
 "use client";
-import { schema } from "@/app/api/create-many-products/route";
+
 import { MySwal } from "@/lib/sweet-alert";
 import { ChangeEvent, useState } from "react";
 
 export default function UploadFromFileForm() {
-  const [json, setJson] = useState<Array<typeof schema>>([]);
+  const [json, setJson] = useState<any>([]);
+
   const [isloading, setIsloading] = useState<boolean>(false);
 
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
