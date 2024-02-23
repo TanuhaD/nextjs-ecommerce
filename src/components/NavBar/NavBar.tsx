@@ -26,7 +26,7 @@ export default async function Navbar() {
         <div className="flex-1">
           <Link
             href="/"
-            className="btn border-none bg-transparent text-xl normal-case hover:bg-transparent hover:text-primary"
+            className="btn border-none bg-transparent normal-case hover:bg-transparent  hover:text-primary sm:text-xl md:text-2xl lg:text-3xl"
           >
             <Image src={logo} height={40} width={40} alt="PrimePicks logo" />
             PrimePicks
